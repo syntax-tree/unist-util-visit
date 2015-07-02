@@ -1,6 +1,6 @@
 {
   "name": "mdast-util-visit",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Utility to recursively walk over mdast nodes",
   "license": "MIT",
   "keywords": [
