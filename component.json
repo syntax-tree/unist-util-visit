@@ -1,0 +1,19 @@
+{
+  "name": "mdast-util-visit",
+  "version": "0.0.0",
+  "description": "Utility to recursively walk over mdast nodes",
+  "license": "MIT",
+  "keywords": [
+    "mdast",
+    "markdown",
+    "node",
+    "visit",
+    "walk",
+    "util",
+    "utility"
+  ],
+  "repository": "wooorm/mdast-util-visit",
+  "scripts": [
+    "index.js"
+  ]
+}

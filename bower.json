@@ -1,0 +1,36 @@
+{
+  "name": "mdast-util-visit",
+  "main": "mdast-util-visit.js",
+  "description": "Utility to recursively walk over mdast nodes",
+  "license": "MIT",
+  "keywords": [
+    "mdast",
+    "markdown",
+    "node",
+    "visit",
+    "walk",
+    "util",
+    "utility"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wooorm/mdast-util-visit.git"
+  },
+  "authors": [
+    "Titus Wormer <tituswormer@gmail.com>"
+  ],
+  "ignore": [
+    ".*",
+    "*.log",
+    "*.md",
+    "build/",
+    "components/",
+    "coverage/",
+    "node_modules/",
+    "build.js",
+    "index.js",
+    "test.js",
+    "component.json",
+    "package.json"
+  ]
+}
