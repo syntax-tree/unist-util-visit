@@ -90,8 +90,10 @@ function visit(tree, type, callback, reverse) {
     one = function (node, index, parent) {
         var result;
 
+        index = index || (parent ? 0 : null);
+
         if (!type || node.type === type) {
-            result = callback(node, index || null, parent || null);
+            result = callback(node, index, parent || null);
         }
 
         if (node.children && result !== false) {
