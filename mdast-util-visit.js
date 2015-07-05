@@ -81,7 +81,7 @@ function visit(tree, type, callback, reverse) {
      */
     all = function (children, parent) {
         return iterate(children, function (child, index) {
-            return one(child, index, parent);
+            return child && one(child, index, parent);
         });
     };
 
