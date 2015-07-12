@@ -48,6 +48,8 @@ visit(ast, 'text', console.log.bind(console));
 
 ### visit(ast\[, type\], callback\[, reverse\])
 
+>   `visit` is synchronous.
+
 Visit nodes. Optionally by [node type](https://github.com/wooorm/mdast/blob/master/doc/nodes.md),
 Optionally in reverse.
 
