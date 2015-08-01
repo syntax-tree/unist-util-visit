@@ -1,4 +1,4 @@
-# unist-util-visit [![Build Status](https://img.shields.io/travis/wooorm/unist-util-visit.svg?style=flat)](https://travis-ci.org/wooorm/unist-util-visit) [![Coverage Status](https://img.shields.io/coveralls/wooorm/unist-util-visit.svg?style=flat)](https://coveralls.io/r/wooorm/unist-util-visit?branch=master)
+# unist-util-visit [![Build Status](https://img.shields.io/travis/wooorm/unist-util-visit.svg)](https://travis-ci.org/wooorm/unist-util-visit) [![Coverage Status](https://img.shields.io/codecov/c/github/wooorm/unist-util-visit.svg)](https://codecov.io/github/wooorm/unist-util-visit?branch=master)
 
 [**Unist**](https://github.com/wooorm/unist) node visitor.
 
