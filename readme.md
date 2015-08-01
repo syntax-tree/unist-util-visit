@@ -1,6 +1,8 @@
 # unist-util-visit [![Build Status](https://img.shields.io/travis/wooorm/unist-util-visit.svg)](https://travis-ci.org/wooorm/unist-util-visit) [![Coverage Status](https://img.shields.io/codecov/c/github/wooorm/unist-util-visit.svg)](https://codecov.io/github/wooorm/unist-util-visit?branch=master)
 
-[**Unist**](https://github.com/wooorm/unist) node visitor.
+[**Unist**](https://github.com/wooorm/unist) node visitor. Useful when working
+with [**mdast**](https://github.com/wooorm/mdast) or
+[**retext**](https://github.com/wooorm/retext).
 
 ## Installation
 
