@@ -52,7 +52,7 @@
     "make": "npm run lint && npm run test-coverage",
     "bundle": "browserify index.js --no-builtins -s unistUtilVisit > unist-util-visit.js",
     "postbundle": "esmangle unist-util-visit.js > unist-util-visit.min.js",
-    "build-md": "mdast . --output --quiet",
+    "build-md": "mdast . --quiet",
     "build": "npm run bundle && npm run build-md"
   }
 }
