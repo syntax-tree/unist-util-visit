@@ -1,8 +1,8 @@
 /**
  * @author Titus Wormer
  * @copyright 2015 Titus Wormer. All rights reserved.
- * @module mdast-util-visit
- * @fileoverview Utility to recursively walk over mdast nodes.
+ * @module unist:util:visit
+ * @fileoverview Utility to recursively walk over unist nodes.
  */
 
 'use strict';

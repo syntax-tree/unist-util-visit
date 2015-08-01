@@ -1,18 +1,22 @@
 {
-  "name": "mdast-util-visit",
+  "name": "unist-util-visit",
   "version": "0.1.1",
-  "description": "Utility to recursively walk over mdast nodes",
+  "description": "Utility to recursively walk over unist nodes",
   "license": "MIT",
   "keywords": [
+    "unist",
     "mdast",
     "markdown",
+    "retext",
+    "natural",
+    "language",
     "node",
     "visit",
     "walk",
     "util",
     "utility"
   ],
-  "repository": "wooorm/mdast-util-visit",
+  "repository": "wooorm/unist-util-visit",
   "scripts": [
     "index.js"
   ]

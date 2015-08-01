@@ -7,10 +7,3 @@ node_js:
 - iojs
 sudo: false
 after_script: npm install coveralls@2.10.0 && cat ./coverage/lcov.info | coveralls
-deploy:
-  provider: npm
-  email: tituswormer@gmail.com
-  api_key:
-    secure: EIgNcrWrBThJMfQ524d0xPvYLlJCTeY0FXwUBhdiR+jQEgRdgtQbS9cvY4BNzX/pQ1BIpXLfPxX2P8GNyWOQ/nU39PckiC/pIUJYPyyKMARHLQ501WxfZnWmnB0BZ53yEGwu18TRwPczPpWFZ6iLTfkyCX9HeFg/FkPARfgeRw0HPbGw0lXigXq2L3xOI0yIpl7N7QqbjGDHrdVObHjYCG6sFblt0Ba/N2PTwclCDMJhZgar319DLyC0fpzTH/SBlaMAQVyAQx+GKP2JtFKlOj5rCv9NPyBDdxtrpjJT8bN5DuESz0QW+FExJTQO9kSuZXlXI/cIIDU76dZMBM25v8PPtN5GWzXX00tX4GrCTVbBqp/jhwpVR2wn+ff3E2S1sNvLkrL6Td3kYVHM5yJuoHc9iIeRZoDyVjEjoGRHq1CgkbunZCMtgGp5ft6b7LAmk33vgRliTa7R6ZlNWqapeLtoz6rC0qGCCPFRJDS0ZJaDoeEh7N48dodpZme/5N3hBNyPMVOulg9oWWni/BXJma0LiviUR/PPkt5jnPkQDXnA2OhFnILk6vDQZDotha0gFVb3wAVOnh5ikjJKCEPfsNERGDWT/7/3LV0WFP01v/VVHgW7RoY79vd85xyB7Yo4lGVRB4SOOelsKLQQ7Vvp33ZpfIGelcLX/Z8sABvF7lw=
-  on:
-    repo: wooorm/mdast-util-visit

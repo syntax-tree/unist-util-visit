@@ -5,8 +5,8 @@
     "coverage/",
     "node_modules/",
     "build.js",
-    "mdast-util-visit.js",
-    "mdast-util-visit.min.js"
+    "unist-util-visit.js",
+    "unist-util-visit.min.js"
   ],
   "jsDoc": {
     "checkAnnotations": "jsdoc3",

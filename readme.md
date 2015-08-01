@@ -1,70 +1,63 @@
-# mdast-util-visit [![Build Status](https://img.shields.io/travis/wooorm/mdast-util-visit.svg?style=flat)](https://travis-ci.org/wooorm/mdast-util-visit) [![Coverage Status](https://img.shields.io/coveralls/wooorm/mdast-util-visit.svg?style=flat)](https://coveralls.io/r/wooorm/mdast-util-visit?branch=master)
+# unist-util-visit [![Build Status](https://img.shields.io/travis/wooorm/unist-util-visit.svg?style=flat)](https://travis-ci.org/wooorm/unist-util-visit) [![Coverage Status](https://img.shields.io/coveralls/wooorm/unist-util-visit.svg?style=flat)](https://coveralls.io/r/wooorm/unist-util-visit?branch=master)
 
-[**mdast**](https://github.com/wooorm/mdast) utility to recursively walk
-over nodes: both forwards and backwards.
+[**Unist**](https://github.com/wooorm/unist) node visitor.
 
 ## Installation
 
 [npm](https://docs.npmjs.com/cli/install):
 
 ```bash
-npm install mdast-util-visit
+npm install unist-util-visit
 ```
 
-**mdast-util-visit** is also available for [bower](http://bower.io/#install-packages),
+**unist-util-visit** is also available for [bower](http://bower.io/#install-packages),
 [component](https://github.com/componentjs/component), and
 [duo](http://duojs.org/#getting-started), and as an AMD, CommonJS, and globals
-module, [uncompressed](mdast-util-visit.js) and
-[compressed](mdast-util-visit.min.js).
+module, [uncompressed](unist-util-visit.js) and
+[compressed](unist-util-visit.min.js).
 
 ## Usage
 
 ```js
-/*
- * Dependencies.
- */
-
 var mdast = require('mdast');
-var visit = require('mdast-util-visit');
+var visit = require('unist-util-visit');
 
-/*
- * AST.
- */
+mdast().use(function (ast) {
+    visit(ast, 'text', console.log.bind(console));
+}).process('Some *emphasis*, **strongness**, and `code`.');
+```
 
-var ast = mdast.parse('Some *emphasis*, **strongness**, and `code`.');
+Yields:
 
-visit(ast, 'text', console.log.bind(console));
-/*
- * {type: 'text', 'value': 'Some '}
- * {type: 'text', 'value': 'emphasis'}
- * {type: 'text', 'value': ', '}
- * {type: 'text', 'value': 'strongness'}
- * {type: 'text', 'value': ', and '}
- * {type: 'text', 'value': '.'}
- */
+```js
+{'type': 'text', 'value': 'Some '}
+{'type': 'text', 'value': 'emphasis'}
+{'type': 'text', 'value': ', '}
+{'type': 'text', 'value': 'strongness'}
+{'type': 'text', 'value': ', and '}
+{'type': 'text', 'value': '.'}
 ```
 
 ## API
 
-### visit(ast\[, type\], callback\[, reverse\])
+### visit([node](https://github.com/wooorm/unist#unist-nodes)\[, type\], callback\[, reverse\])
 
 >   `visit` is synchronous.
 
-Visit nodes. Optionally by [node type](https://github.com/wooorm/mdast/blob/master/doc/nodes.md),
-Optionally in reverse.
+Visit nodes. Optionally by node type. Optionally in reverse.
 
-*   `ast` (`Node`)
-    — [**mdast** node](https://github.com/wooorm/mdast/blob/master/doc/nodes.md);
+*   `node` (`Node`)
+    — [**Unist** node](https://github.com/wooorm/unist#unist-nodes);
 
 *   `type` (`string`, optional)
     — Optional node type to invoke `callback` for. By default, all nodes are
     visited.
 
 *   `callback` (`function(node, index?, parent?)`)
-    — Callback when a node (matching `type`) is found. Invoked with the node,
-    its index in `parent` (or `null`), and its parent (or `null`).
+    — Callback invoked when a node (matching `type`?) is found. Invoked with
+    the node, its `index` in `parent` (or `null`), and its `parent` (or `null`).
 
-    Can return `false` to stop checking.
+    Can return `false` to immediately stop checking.
 
 *   `reverse` (`boolean`, default: `false`, optional)
     — When falsey, checking starts at the first child and continues through

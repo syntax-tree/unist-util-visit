@@ -1,11 +1,15 @@
 {
-  "name": "mdast-util-visit",
+  "name": "unist-util-visit",
   "version": "0.1.1",
-  "description": "Utility to recursively walk over mdast nodes",
+  "description": "Utility to recursively walk over unist nodes",
   "license": "MIT",
   "keywords": [
+    "unist",
     "mdast",
     "markdown",
+    "retext",
+    "natural",
+    "language",
     "node",
     "visit",
     "walk",
@@ -14,7 +18,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/wooorm/mdast-util-visit.git"
+    "url": "https://github.com/wooorm/unist-util-visit.git"
   },
   "author": {
     "name": "Titus Wormer",
@@ -32,9 +36,9 @@
     "jscs": "^2.0.0",
     "jscs-jsdoc": "^1.0.0",
     "mdast": "^0.28.0",
+    "mdast-comment-config": "^0.1.2",
     "mdast-github": "^0.3.0",
     "mdast-lint": "^0.4.0",
-    "mdast-yaml-config": "^0.2.0",
     "mocha": "^2.0.0"
   },
   "scripts": {
@@ -47,8 +51,8 @@
     "lint-style": "jscs --reporter inline .",
     "lint": "npm run lint-api && npm run lint-style",
     "make": "npm run lint && npm run test-coverage",
-    "bundle": "browserify index.js --no-builtins -s mdastUtilVisit > mdast-util-visit.js",
-    "postbundle": "esmangle mdast-util-visit.js > mdast-util-visit.min.js",
+    "bundle": "browserify index.js --no-builtins -s unistUtilVisit > unist-util-visit.js",
+    "postbundle": "esmangle unist-util-visit.js > unist-util-visit.min.js",
     "build-md": "mdast . --output --quiet",
     "build": "npm run bundle && npm run build-md"
   }

@@ -52,7 +52,7 @@ var reverseTypes = [
  * Tests.
  */
 
-describe('mdast-util-visit', function () {
+describe('unist-util-visit', function () {
     it('should fail without tree', function () {
         assert.throws(function () {
             visit();
