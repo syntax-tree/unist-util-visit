@@ -2,6 +2,11 @@
 
 <!--lint disable no-multiple-toplevel-headings-->
 
+1.0.0 / 2015-08-01
+==================
+
+*   Rename project to `unist-util-visit` ([5fd8417](https://github.com/wooorm/unist-util-visit/commit/5fd8417))
+
 0.1.1 / 2015-07-05
 ==================
 
