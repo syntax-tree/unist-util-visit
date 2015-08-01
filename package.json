@@ -25,13 +25,13 @@
     "LICENSE"
   ],
   "devDependencies": {
-    "browserify": "^10.0.0",
-    "eslint": "^0.24.0",
+    "browserify": "^11.0.0",
+    "eslint": "^1.0.0",
     "esmangle": "^1.0.0",
     "istanbul": "^0.3.0",
-    "jscs": "^1.0.0",
+    "jscs": "^2.0.0",
     "jscs-jsdoc": "^1.0.0",
-    "mdast": "^0.26.0",
+    "mdast": "^0.28.0",
     "mdast-github": "^0.3.0",
     "mdast-lint": "^0.4.0",
     "mdast-yaml-config": "^0.2.0",
