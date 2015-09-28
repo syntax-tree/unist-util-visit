@@ -24,8 +24,10 @@ module, [uncompressed](unist-util-visit.js) and
 var mdast = require('mdast');
 var visit = require('unist-util-visit');
 
-mdast().use(function (ast) {
-    visit(ast, 'text', console.log.bind(console));
+mdast().use(function () {
+    return function (ast) {
+        visit(ast, 'text', console.log.bind(console));
+    };
 }).process('Some *emphasis*, **strongness**, and `code`.');
 ```
 
