@@ -7,14 +7,14 @@
  */
 
 var visit = require('./index.js');
-var mdast = require('mdast');
+var remark = require('remark');
 var assert = require('assert');
 
 /*
  * Fixture.
  */
 
-var ast = mdast.parse('Some *emphasis*, **strongness**, and `code`.');
+var ast = remark.parse('Some *emphasis*, **strongness**, and `code`.');
 
 var STOP = 5;
 

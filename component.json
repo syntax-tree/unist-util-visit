@@ -5,7 +5,7 @@
   "license": "MIT",
   "keywords": [
     "unist",
-    "mdast",
+    "remark",
     "markdown",
     "retext",
     "natural",
