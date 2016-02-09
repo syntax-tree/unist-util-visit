@@ -1,7 +1,7 @@
 # unist-util-visit [![Build Status](https://img.shields.io/travis/wooorm/unist-util-visit.svg)](https://travis-ci.org/wooorm/unist-util-visit) [![Coverage Status](https://img.shields.io/codecov/c/github/wooorm/unist-util-visit.svg)](https://codecov.io/github/wooorm/unist-util-visit?branch=master)
 
 [**Unist**](https://github.com/wooorm/unist) node visitor. Useful when working
-with [**mdast**](https://github.com/wooorm/mdast) or
+with [**remark**](https://github.com/wooorm/remark) or
 [**retext**](https://github.com/wooorm/retext).
 
 ## Installation
@@ -21,10 +21,10 @@ module, [uncompressed](unist-util-visit.js) and
 ## Usage
 
 ```js
-var mdast = require('mdast');
+var remark = require('remark');
 var visit = require('unist-util-visit');
 
-mdast().use(function () {
+remark().use(function () {
     return function (ast) {
         visit(ast, 'text', console.log.bind(console));
     };
@@ -44,7 +44,7 @@ Yields:
 
 ## API
 
-### visit([node](https://github.com/wooorm/unist#unist-nodes)\[, type\], callback\[, reverse\])
+### visit([node](https://github.com/wooorm/unist#unist-nodes)\[, type], callback\[, reverse])
 
 >   `visit` is synchronous.
 
