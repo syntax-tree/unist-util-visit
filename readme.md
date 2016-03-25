@@ -106,4 +106,4 @@ Invoked when a node (when `type` is given, matching `type`) is found.
 
 [node]: https://github.com/wooorm/unist#node
 
-[visitor]: #stop-visitornode-index-parent
+[visitor]: #stop--visitornode-index-parent
