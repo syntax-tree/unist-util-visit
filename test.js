@@ -8,21 +8,21 @@
 
 'use strict';
 
-/* eslint-env node, mocha */
+/* eslint-env node */
 
 /*
  * Dependencies.
  */
 
-var visit = require('./index.js');
+var test = require('tape');
 var remark = require('remark');
-var assert = require('assert');
+var visit = require('./index.js');
 
 /*
  * Fixture.
  */
 
-var ast = remark.parse('Some *emphasis*, **strongness**, and `code`.');
+var ast = remark.parse('Some _emphasis_, **strongness**, and `code`.');
 
 var STOP = 5;
 
@@ -60,75 +60,83 @@ var reverseTypes = [
  * Tests.
  */
 
-describe('unist-util-visit', function () {
-    it('should fail without tree', function () {
-        assert.throws(function () {
-            visit();
-        });
-    });
+test('unist-util-visit', function (t) {
+    t.throws(function () {
+        visit();
+    }, 'should fail without tree');
 
-    it('should fail without visitor', function () {
-        assert.throws(function () {
-            visit(ast);
-        });
-    });
+    t.throws(function () {
+        visit(ast);
+    }, 'should fail without visitor');
 
-    it('should iterate over all nodes', function () {
+    t.test('should iterate over all nodes', function (st) {
         var n = -1;
 
         visit(ast, function (node) {
-            assert.equal(node.type, types[++n]);
+            st.equal(node.type, types[++n]);
         });
 
-        assert.equal(n, types.length - 1);
+        st.equal(n, types.length - 1, 'should visit all nodes');
+
+        st.end();
     });
 
-    it('should iterate over all nodes, backwards', function () {
+    t.test('should iterate over all nodes, backwards', function (st) {
         var n = -1;
 
         visit(ast, function (node) {
-            assert.equal(node.type, reverseTypes[++n]);
+            st.equal(node.type, reverseTypes[++n]);
         }, true);
 
-        assert.equal(n, reverseTypes.length - 1);
+        st.equal(n, reverseTypes.length - 1, 'should visit all nodes');
+
+        st.end();
     });
 
-    it('should only visit given `types`', function () {
+    t.test('should only visit given `types`', function (st) {
         var n = 0;
 
         visit(ast, 'text', function (node) {
             n++;
-            assert.equal(node.type, 'text');
+            st.equal(node.type, 'text');
         });
 
-        assert.equal(n, textNodes);
+        st.equal(n, textNodes, 'should visit all nodes');
+
+        st.end();
     });
 
-    it('should stop when `visitor` yields `false`', function () {
+    t.test('should stop if `visitor` stops', function (st) {
         var n = -1;
 
         visit(ast, function (node) {
-            assert.equal(node.type, types[++n]);
+            st.equal(node.type, types[++n]);
 
             if (n === STOP) {
                 return false;
             }
         });
 
-        assert.equal(n, STOP);
+        st.equal(n, STOP, 'should visit all nodes');
+
+        st.end();
     });
 
-    it('should stop when `visitor` yields `false`, backwards', function () {
+    t.test('should stop if `visitor` stops, backwards', function (st) {
         var n = -1;
 
         visit(ast, function (node) {
-            assert.equal(node.type, reverseTypes[++n]);
+            st.equal(node.type, reverseTypes[++n]);
 
             if (n === STOP) {
                 return false;
             }
         }, true);
 
-        assert.equal(n, STOP);
+        st.equal(n, STOP, 'should visit all nodes');
+
+        st.end();
     });
+
+    t.end();
 });
