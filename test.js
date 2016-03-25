@@ -67,7 +67,7 @@ describe('unist-util-visit', function () {
         });
     });
 
-    it('should fail without callback', function () {
+    it('should fail without visitor', function () {
         assert.throws(function () {
             visit(ast);
         });
@@ -104,7 +104,7 @@ describe('unist-util-visit', function () {
         assert.equal(n, textNodes);
     });
 
-    it('should stop when `callback` yields `false`', function () {
+    it('should stop when `visitor` yields `false`', function () {
         var n = -1;
 
         visit(ast, function (node) {
@@ -118,7 +118,7 @@ describe('unist-util-visit', function () {
         assert.equal(n, STOP);
     });
 
-    it('should stop when `callback` yields `false`, backwards', function () {
+    it('should stop when `visitor` yields `false`, backwards', function () {
         var n = -1;
 
         visit(ast, function (node) {

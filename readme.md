@@ -41,7 +41,7 @@ Yields:
 
 ## API
 
-### visit([node](https://github.com/wooorm/unist#unist-nodes)\[, type], callback\[, reverse])
+### visit([node](https://github.com/wooorm/unist#unist-nodes)\[, type], visitor\[, reverse])
 
 >   `visit` is synchronous.
 
@@ -51,11 +51,11 @@ Visit nodes. Optionally by node type. Optionally in reverse.
     — [**Unist** node](https://github.com/wooorm/unist#unist-nodes);
 
 *   `type` (`string`, optional)
-    — Optional node type to invoke `callback` for. By default, all nodes are
+    — Optional node type to invoke `visitor` for. By default, all nodes are
     visited.
 
-*   `callback` (`function(node, index?, parent?)`)
-    — Callback invoked when a node (matching `type`?) is found. Invoked with
+*   `visitor` (`function(node, index?, parent?)`)
+    — visitor invoked when a node (matching `type`?) is found. Invoked with
     the node, its `index` in `parent` (or `null`), and its `parent` (or `null`).
 
     Can return `false` to immediately stop checking.
