@@ -1,7 +1,7 @@
 {
   "name": "unist-util-visit",
   "version": "1.0.1",
-  "description": "Utility to recursively walk over unist nodes",
+  "description": "Recursively walk over unist nodes",
   "license": "MIT",
   "keywords": [
     "unist",

@@ -1,7 +1,7 @@
 {
   "name": "unist-util-visit",
   "version": "1.0.1",
-  "description": "Utility to recursively walk over unist nodes",
+  "description": "Recursively walk over unist nodes",
   "license": "MIT",
   "keywords": [
     "unist",
@@ -20,13 +20,13 @@
     "type": "git",
     "url": "https://github.com/wooorm/unist-util-visit.git"
   },
-  "author": {
-    "name": "Titus Wormer",
-    "email": "tituswormer@gmail.com"
-  },
+  "bugs": "https://github.com/wooorm/unist-util-visit/issues",
+  "author": "Titus Wormer <tituswormer@gmail.com> (http://wooorm.com)",
+  "contributors": [
+    "Titus Wormer <tituswormer@gmail.com> (http://wooorm.com)"
+  ],
   "files": [
-    "index.js",
-    "LICENSE"
+    "index.js"
   ],
   "devDependencies": {
     "browserify": "^11.0.0",
@@ -42,17 +42,15 @@
     "remark-lint": "^2.3.1"
   },
   "scripts": {
-    "test-api": "mocha --check-leaks test.js",
-    "test-coverage": "istanbul cover _mocha -- test.js",
-    "test-travis": "npm run test-coverage",
-    "test": "npm run test-api",
+    "build-md": "remark . --quiet --frail",
+    "build-bundle": "browserify index.js --no-builtins -s unistUtilVisit > unist-util-visit.js",
+    "build-mangle": "esmangle unist-util-visit.js > unist-util-visit.min.js",
+    "build": "npm run build-md && npm run build-bundle && npm run build-mangle",
     "lint-api": "eslint .",
     "lint-style": "jscs --reporter inline .",
     "lint": "npm run lint-api && npm run lint-style",
-    "make": "npm run lint && npm run test-coverage",
-    "bundle": "browserify index.js --no-builtins -s unistUtilVisit > unist-util-visit.js",
-    "postbundle": "esmangle unist-util-visit.js > unist-util-visit.min.js",
-    "build-md": "remark . --quiet",
-    "build": "npm run bundle && npm run build-md"
+    "test-api": "mocha --check-leaks test.js",
+    "test-coverage": "istanbul cover _mocha -- test.js",
+    "test": "npm run build && npm run lint && npm run test-coverage"
   }
 }

@@ -2,7 +2,7 @@
  * @author Titus Wormer
  * @copyright 2015 Titus Wormer. All rights reserved.
  * @module unist:util:visit
- * @fileoverview Utility to recursively walk over unist nodes.
+ * @fileoverview Recursively walk over unist nodes.
  */
 
 'use strict';
