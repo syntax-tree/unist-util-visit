@@ -1,6 +1,3 @@
-build/
-components/
 coverage/
-build.js
 unist-util-visit.js
 unist-util-visit.min.js

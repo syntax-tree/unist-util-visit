@@ -6,17 +6,14 @@ with [**remark**](https://github.com/wooorm/remark) or
 
 ## Installation
 
-[npm](https://docs.npmjs.com/cli/install):
+[npm][]:
 
 ```bash
-npm install unist-util-visit
+npm install html-element-attributes
 ```
 
-**unist-util-visit** is also available for [bower](http://bower.io/#install-packages),
-[component](https://github.com/componentjs/component), and
-[duo](http://duojs.org/#getting-started), and as an AMD, CommonJS, and globals
-module, [uncompressed](unist-util-visit.js) and
-[compressed](unist-util-visit.min.js).
+**html-element-attributes** is also available as an AMD, CommonJS, and
+globals module, [uncompressed and compressed][releases].
 
 ## Usage
 
@@ -73,3 +70,9 @@ Visit nodes. Optionally by node type. Optionally in reverse.
 ## License
 
 [MIT](LICENSE) © [Titus Wormer](http://wooorm.com)
+
+<!-- Definition -->
+
+[npm]: https://docs.npmjs.com/cli/install
+
+[releases]: https://github.com/wooorm/unist-util-visit/releases
