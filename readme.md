@@ -1,7 +1,7 @@
 # unist-util-visit [![Build Status][build-badge]][build-page] [![Coverage Status][coverage-badge]][coverage-page]
 
-[Unist][] node visitor.  Useful with working with [**remark**][remark]
-or [**retext**][retext].
+[Unist][] node visitor.  Useful with working with [**remark**][remark],
+[**retext**][retext], or [**rehype**][rehype].
 
 ## Installation
 
@@ -11,9 +11,6 @@ or [**retext**][retext].
 npm install unist-util-visit
 ```
 
-**unist-util-visit** is also available as an AMD, CommonJS, and
-globals module, [uncompressed and compressed][releases].
-
 ## Usage
 
 Dependencies:
@@ -22,41 +19,42 @@ Dependencies:
 var remark = require('remark');
 var visit = require('unist-util-visit');
 
-remark().use(function () {
-    return function (ast) {
-        visit(ast, 'text', function (node) {
-          console.log(node)
-        });
-    };
-}).process('Some _emphasis_, **strongness**, and `code`.');
+remark().use(plugin).process('Some _emphasis_, **importance**, and `code`.');
+
+function plugin() {
+  return transformer;
+  function transformer(tree) {
+    visit(tree, 'text', visitor);
+  }
+  function visitor(node) {
+    console.log(node);
+  }
+}
 ```
 
 Yields:
 
 ```js
-{'type': 'text', 'value': 'Some '}
-{'type': 'text', 'value': 'emphasis'}
-{'type': 'text', 'value': ', '}
-{'type': 'text', 'value': 'strongness'}
-{'type': 'text', 'value': ', and '}
-{'type': 'text', 'value': '.'}
+{type: 'text', value: 'Some '}
+{type: 'text', value: 'emphasis'}
+{type: 'text', value: ', '}
+{type: 'text', value: 'strongness'}
+{type: 'text', value: ', and '}
+{type: 'text', value: '.'}
 ```
 
 ## API
 
 ### `visit(node[, type], visitor[, reverse])`
 
-Visit nodes. Optionally by node type. Optionally in reverse.
+Visit nodes.  Optionally by node type.  Optionally in reverse.
 
 *   `node` ([`Node`][node])
     — Node to search;
-
 *   `type` (`string`, optional)
     — Node type;
-
 *   `visitor` ([Function][visitor])
     — Visitor invoked when a node is found;
-
 *   `reverse` (`boolean`, default: `false`)
     — When falsey, checking starts at the first child and continues
     through to later children.  When truthy, this is reversed.
@@ -68,13 +66,15 @@ Visit nodes. Optionally by node type. Optionally in reverse.
 
 Invoked when a node (when `type` is given, matching `type`) is found.
 
-**Parameters**:
+###### Parameters
 
 *   `node` (`Node`) — Found node;
 *   `index` (`number?`) — Position of `node` in `parent`;
 *   `index` (`Node?`) — Parent of `node`.
 
-**Returns**: `boolean?` - When `false`, visiting is immediately stopped.
+###### Returns
+
+`boolean?` - When `false`, visiting is immediately stopped.
 
 ## License
 
@@ -92,8 +92,6 @@ Invoked when a node (when `type` is given, matching `type`) is found.
 
 [npm]: https://docs.npmjs.com/cli/install
 
-[releases]: https://github.com/wooorm/unist-util-visit/releases
-
 [license]: LICENSE
 
 [author]: http://wooorm.com
@@ -103,6 +101,8 @@ Invoked when a node (when `type` is given, matching `type`) is found.
 [retext]: https://github.com/wooorm/retext
 
 [remark]: https://github.com/wooorm/remark
+
+[rehype]: https://github.com/wooorm/rehype
 
 [node]: https://github.com/wooorm/unist#node
 
