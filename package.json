@@ -32,15 +32,14 @@
     "browserify": "^13.0.0",
     "esmangle": "^1.0.0",
     "istanbul": "^0.4.0",
-    "remark": "^4.0.0",
-    "remark-comment-config": "^3.0.0",
-    "remark-github": "^4.0.0",
-    "remark-lint": "^3.0.0",
+    "remark": "^6.0.0",
+    "remark-cli": "^2.0.0",
+    "remark-preset-wooorm": "^1.0.0",
     "tape": "^4.5.1",
     "xo": "^0.17.1"
   },
   "scripts": {
-    "build-md": "remark . --quiet --frail",
+    "build-md": "remark . --quiet --frail --output",
     "build-bundle": "browserify index.js --no-builtins -s unistUtilVisit > unist-util-visit.js",
     "build-mangle": "esmangle unist-util-visit.js > unist-util-visit.min.js",
     "build": "npm run build-md && npm run build-bundle && npm run build-mangle",
@@ -54,5 +53,8 @@
     "ignores": [
       "unist-util-visit.js"
     ]
+  },
+  "remarkConfig": {
+    "presets": "wooorm"
   }
 }
