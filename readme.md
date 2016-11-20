@@ -69,7 +69,7 @@ Invoked when a node (when `type` is given, matching `type`) is found.
 
 *   `node` (`Node`) — Found node;
 *   `index` (`number?`) — Position of `node` in `parent`;
-*   `index` (`Node?`) — Parent of `node`.
+*   `parent` (`Node?`) — Parent of `node`.
 
 ###### Returns
 
