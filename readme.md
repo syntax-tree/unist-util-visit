@@ -13,8 +13,6 @@ npm install unist-util-visit
 
 ## Usage
 
-Dependencies:
-
 ```javascript
 var remark = require('remark');
 var visit = require('unist-util-visit');
@@ -49,6 +47,8 @@ Yields:
 
 Visit nodes.  Optionally by node type.  Optionally in reverse.
 
+###### Parameters
+
 *   `node` ([`Node`][node])
     — Node to search;
 *   `type` (`string`, optional)
@@ -58,7 +58,6 @@ Visit nodes.  Optionally by node type.  Optionally in reverse.
 *   `reverse` (`boolean`, default: `false`)
     — When falsey, checking starts at the first child and continues
     through to later children.  When truthy, this is reversed.
-
     This **does not** mean checking starts at the deepest node and
     continues on to the highest node.
 
