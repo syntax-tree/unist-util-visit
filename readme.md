@@ -81,13 +81,13 @@ Invoked when a node (when `type` is given, matching `type`) is found.
 
 <!-- Definition -->
 
-[build-badge]: https://img.shields.io/travis/wooorm/unist-util-visit.svg
+[build-badge]: https://img.shields.io/travis/syntax-tree/unist-util-visit.svg
 
-[build-page]: https://travis-ci.org/wooorm/unist-util-visit
+[build-page]: https://travis-ci.org/syntax-tree/unist-util-visit
 
-[coverage-badge]: https://img.shields.io/codecov/c/github/wooorm/unist-util-visit.svg
+[coverage-badge]: https://img.shields.io/codecov/c/github/syntax-tree/unist-util-visit.svg
 
-[coverage-page]: https://codecov.io/github/wooorm/unist-util-visit?branch=master
+[coverage-page]: https://codecov.io/github/syntax-tree/unist-util-visit?branch=master
 
 [npm]: https://docs.npmjs.com/cli/install
 
@@ -95,7 +95,7 @@ Invoked when a node (when `type` is given, matching `type`) is found.
 
 [author]: http://wooorm.com
 
-[unist]: https://github.com/wooorm/unist
+[unist]: https://github.com/syntax-tree/unist
 
 [retext]: https://github.com/wooorm/retext
 
@@ -103,6 +103,6 @@ Invoked when a node (when `type` is given, matching `type`) is found.
 
 [rehype]: https://github.com/wooorm/rehype
 
-[node]: https://github.com/wooorm/unist#node
+[node]: https://github.com/syntax-tree/unist#node
 
 [visitor]: #stop--visitornode-index-parent
