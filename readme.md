@@ -46,16 +46,16 @@ Visit nodes.  Optionally by node type.  Optionally in reverse.
 ###### Parameters
 
 *   `node` ([`Node`][node])
-    — Node to search;
+    — Node to search
 *   `type` (`string`, optional)
-    — Node type;
+    — Node type
 *   `visitor` ([Function][visitor])
-    — Visitor invoked when a node is found;
+    — Visitor invoked when a node is found
 *   `reverse` (`boolean`, default: `false`)
     — When falsey, checking starts at the first child and continues
     through to later children.  When truthy, this is reversed.
     This **does not** mean checking starts at the deepest node and
-    continues on to the highest node.
+    continues on to the highest node
 
 #### `stop? = visitor(node, index, parent)`
 
@@ -63,9 +63,9 @@ Invoked when a node (when `type` is given, matching `type`) is found.
 
 ###### Parameters
 
-*   `node` (`Node`) — Found node;
-*   `index` (`number?`) — Position of `node` in `parent`;
-*   `parent` (`Node?`) — Parent of `node`.
+*   `node` (`Node`) — Found node
+*   `index` (`number?`) — Position of `node` in `parent`
+*   `parent` (`Node?`) — Parent of `node`
 
 ###### Returns
 
