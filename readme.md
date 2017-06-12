@@ -1,6 +1,6 @@
 # unist-util-visit [![Build Status][build-badge]][build-page] [![Coverage Status][coverage-badge]][coverage-page]
 
-[Unist][] node visitor.  Useful with working with [**remark**][remark],
+[Unist][] node visitor.  Useful when working with [**remark**][remark],
 [**retext**][retext], or [**rehype**][rehype].
 
 ## Installation
