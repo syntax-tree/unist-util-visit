@@ -15,30 +15,26 @@ npm install unist-util-visit
 
 ```javascript
 var remark = require('remark');
-var visit = require('unist-util-visit');
+var visit = require('.');
 
-remark().use(plugin).process('Some _emphasis_, **importance**, and `code`.');
+var tree = remark.parse('Some _emphasis_, **importance**, and `code`.');
 
-function plugin() {
-  return transformer;
-  function transformer(tree) {
-    visit(tree, 'text', visitor);
-  }
-  function visitor(node) {
-    console.log(node);
-  }
+visit(tree, 'text', visitor);
+
+function visitor(node) {
+  console.log(node);
 }
 ```
 
 Yields:
 
 ```js
-{type: 'text', value: 'Some '}
-{type: 'text', value: 'emphasis'}
-{type: 'text', value: ', '}
-{type: 'text', value: 'importance'}
-{type: 'text', value: ', and '}
-{type: 'text', value: '.'}
+{ type: 'text', value: 'Some ' }
+{ type: 'text', value: 'emphasis' }
+{ type: 'text', value: ', ' }
+{ type: 'text', value: 'importance' }
+{ type: 'text', value: ', and ' }
+{ type: 'text', value: '.' }
 ```
 
 ## API
