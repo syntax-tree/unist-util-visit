@@ -36,7 +36,7 @@ Yields:
 {type: 'text', value: 'Some '}
 {type: 'text', value: 'emphasis'}
 {type: 'text', value: ', '}
-{type: 'text', value: 'strongness'}
+{type: 'text', value: 'importance'}
 {type: 'text', value: ', and '}
 {type: 'text', value: '.'}
 ```
