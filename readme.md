@@ -15,7 +15,7 @@ npm install unist-util-visit
 
 ```javascript
 var remark = require('remark');
-var visit = require('.');
+var visit = require('unist-util-visit');
 
 var tree = remark.parse('Some _emphasis_, **importance**, and `code`.');
 
