@@ -98,7 +98,7 @@ test('unist-util-visit', function (t) {
 
     visit(tree, types, function (node) {
       n++;
-      st.ok(types.includes(node.type), 'should be a requested type: ' + node.type);
+      st.ok(types.indexOf(node.type) !== -1, 'should be a requested type: ' + node.type);
     });
 
     st.equal(n, textNodes + codeNodes, 'should visit all matching nodes');
