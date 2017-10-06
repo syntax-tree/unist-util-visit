@@ -9,6 +9,7 @@ var tree = remark().parse('Some _emphasis_, **importance**, and `code`.');
 var STOP = 5;
 
 var textNodes = 6;
+var codeNodes = 1;
 
 var types = [
   'root',
@@ -78,7 +79,7 @@ test('unist-util-visit', function (t) {
     st.end();
   });
 
-  t.test('should only visit given `types`', function (st) {
+  t.test('should only visit a given `type`', function (st) {
     var n = 0;
 
     visit(tree, 'text', function (node) {
@@ -86,7 +87,21 @@ test('unist-util-visit', function (t) {
       st.equal(node.type, 'text');
     });
 
-    st.equal(n, textNodes, 'should visit all nodes');
+    st.equal(n, textNodes, 'should visit all matching nodes');
+
+    st.end();
+  });
+
+  t.test('should only visit given `type`s', function (st) {
+    var n = 0;
+    var types = ['text', 'inlineCode'];
+
+    visit(tree, types, function (node) {
+      n++;
+      st.ok(types.includes(node.type), 'should be a requested type: ' + node.type);
+    });
+
+    st.equal(n, textNodes + codeNodes, 'should visit all matching nodes');
 
     st.end();
   });
