@@ -47,8 +47,8 @@ Visit nodes.  Optionally by node type.  Optionally in reverse.
 
 *   `node` ([`Node`][node])
     — Node to search
-*   `type` (`string`, optional)
-    — Node type
+*   `type` (`string` or `Array.<string>`, optional)
+    — Node type (or types, if provided as an array)
 *   `visitor` ([Function][visitor])
     — Visitor invoked when a node is found
 *   `reverse` (`boolean`, default: `false`)
