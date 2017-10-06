@@ -3,12 +3,27 @@
 /* Expose. */
 module.exports = visit;
 
+/* Regular expression special characters
+ * http://ecma-international.org/ecma-262/7.0/#prod-SyntaxCharacter
+ */
+var reSpecial = /[\\^$.*+?()[\]{}|]/g;
+
 /* Visit. */
 function visit(tree, type, visitor, reverse) {
+  var matchType;
+
   if (typeof type === 'function') {
     reverse = visitor;
     visitor = type;
     type = null;
+  } else if (type) {
+    if (!Array.isArray(type)) {
+      type = [type];
+    }
+    matchType = type.map(function (type) {
+      return '^' + type.replace(reSpecial, '\\$&') + '$';
+    });
+    matchType = new RegExp(matchType.join('|'));
   }
 
   one(tree);
@@ -19,7 +34,7 @@ function visit(tree, type, visitor, reverse) {
 
     index = index || (parent ? 0 : null);
 
-    if (!type || node.type === type) {
+    if (!type || matchType.test(node.type)) {
       result = visitor(node, index, parent || null);
     }
 
