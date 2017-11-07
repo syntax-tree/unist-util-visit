@@ -3,27 +3,14 @@
 /* Expose. */
 module.exports = visit;
 
-/* Regular expression special characters
- * http://ecma-international.org/ecma-262/7.0/#prod-SyntaxCharacter
- */
-var reSpecial = /[\\^$.*+?()[\]{}|]/g;
+var is = require('unist-util-is');
 
 /* Visit. */
-function visit(tree, type, visitor, reverse) {
-  var matchType;
-
-  if (typeof type === 'function') {
+function visit(tree, test, visitor, reverse) {
+  if (typeof test === 'function' && typeof visitor !== 'function') {
     reverse = visitor;
-    visitor = type;
-    type = null;
-  } else if (type) {
-    if (!Array.isArray(type)) {
-      type = [type];
-    }
-    matchType = type.map(function (type) {
-      return '^' + type.replace(reSpecial, '\\$&') + '$';
-    });
-    matchType = new RegExp(matchType.join('|'));
+    visitor = test;
+    test = null;
   }
 
   one(tree);
@@ -34,7 +21,7 @@ function visit(tree, type, visitor, reverse) {
 
     index = index || (parent ? 0 : null);
 
-    if (!type || matchType.test(node.type)) {
+    if (!test || node.type === test || is(test, node, index, parent || null)) {
       result = visitor(node, index, parent || null);
     }
 

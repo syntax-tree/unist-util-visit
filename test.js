@@ -106,6 +106,46 @@ test('unist-util-visit', function (t) {
     st.end();
   });
 
+  t.test('should accept any `is`-compatible test', function (st) {
+    var n = 0;
+    var test = function (node, index) {
+      return index > 3;
+    };
+
+    visit(tree, test, function (node, index, parent) {
+      n++;
+      var parentType = parent && parent.type;
+      st.ok(index > 3, 'should be a requested node: ' + parentType + '/[' + index + ']');
+    });
+
+    st.equal(n, 3, 'should visit all matching nodes');
+
+    st.end();
+  });
+
+  t.test('should accept an array of `is`-compatible tests', function (st) {
+    var n = 0;
+    var tests = [
+      function (node) {
+        return node.type === 'root';
+      },
+      'paragraph',
+      {value: '.'},
+      ['emphasis', 'strong']
+    ];
+    var expectedTypes = ['root', 'paragraph', 'emphasis', 'strong'];
+
+    visit(tree, tests, function (node) {
+      n++;
+      st.ok(expectedTypes.indexOf(node.type) !== -1 || node.value === '.',
+          'should be a requested type: ' + node.type);
+    });
+
+    st.equal(n, 5, 'should visit all matching nodes');
+
+    st.end();
+  });
+
   t.test('should stop if `visitor` stops', function (st) {
     var n = -1;
 
