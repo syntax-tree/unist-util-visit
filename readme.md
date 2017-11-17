@@ -37,6 +37,8 @@ Yields:
 { type: 'text', value: '.' }
 ```
 
+Note that you can also use a visitor to mutate the items, as long as [it does not change the child traversal order](https://github.com/syntax-tree/unist-util-visit/issues/9), such as add or delete sibling nodes. Modifying a node's parents within the visitor may not work as expected since child traversal is determined when parent is visited.
+
 ## API
 
 ### `visit(node[, test], visitor[, reverse])`
