@@ -43,6 +43,11 @@ Yields:
 
 Visit nodes.  Optionally filtering nodes.  Optionally in reverse.
 
+Note that you can also use a visitor to mutate the items, as long as [it does
+not change the child traversal order][gh-9], such as add or delete sibling
+nodes.  Modifying a node’s parents within the visitor may not work as expected
+since child traversal is determined when the parent is visited.
+
 ###### Parameters
 
 *   `node` ([`Node`][node])
@@ -117,3 +122,5 @@ Invoked when a node (matching `test`, if given) is found.
 [is]: https://github.com/syntax-tree/unist-util-is#istest-node-index-parent-context
 
 [visitor]: #stop--visitornode-index-parent
+
+[gh-9]: https://github.com/syntax-tree/unist-util-visit/issues/9
