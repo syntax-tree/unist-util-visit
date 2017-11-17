@@ -16,7 +16,7 @@
     "util",
     "utility"
   ],
-  "repository": "https://github.com/syntax-tree/unist-util-visit",
+  "repository": "syntax-tree/unist-util-visit",
   "bugs": "https://github.com/syntax-tree/unist-util-visit/issues",
   "author": "Titus Wormer <tituswormer@gmail.com> (http://wooorm.com)",
   "contributors": [
