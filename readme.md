@@ -89,6 +89,14 @@ Invoked when a node (matching `test`, if given) is found.
 *   [`unist-util-select`](https://github.com/eush77/unist-util-select)
     — Select nodes with CSS-like selectors
 
+## Contribute
+
+See [`contribute.md` in `syntax-tree/unist`][contribute] for ways to get
+started.
+
+This organisation has a [Code of Conduct][coc].  By interacting with this
+repository, organisation, or community you agree to abide by its terms.
+
 ## License
 
 [MIT][license] © [Titus Wormer][author]
@@ -124,3 +132,7 @@ Invoked when a node (matching `test`, if given) is found.
 [visitor]: #stop--visitornode-index-parent
 
 [gh-9]: https://github.com/syntax-tree/unist-util-visit/issues/9
+
+[contribute]: https://github.com/syntax-tree/unist/blob/master/contributing.md
+
+[coc]: https://github.com/syntax-tree/unist/blob/master/code-of-conduct.md
