@@ -46,12 +46,12 @@ filtering nodes.  Optionally in reverse.
 
 ###### Parameters
 
-*   `node` ([`Node`][node])
-    — Node to search
+*   `tree` ([`Node`][node])
+    — Tree to traverse
 *   `test` ([`Test`][is], optional)
-    — Node type or other [`is`][is]-compatible test
+    — [`is`][is]-compatible test (such as a node type)
 *   `visitor` ([Function][visitor])
-    — Visitor invoked when a node is found that passes `test`
+    — Function invoked when a node is found that passes `test`
 *   `reverse` (`boolean`, default: `false`)
     — When falsey, checking starts at the first child and continues
     through to later children.  When truthy, this is reversed.
@@ -67,7 +67,7 @@ removing [**children**][child] before `index`, you should return a new `index`
 (`number`) from `visitor` to specify the next sibling to visit.  Replacing
 `node` itself still causes its descendants to be visited.  Adding or removing
 nodes after `index` is handled as expected without needing to return a new
-`index`.  Remove the `children` property on `parent` still results in them
+`index`.  Removing the `children` property on `parent` still results in them
 being traversed.
 
 ###### Parameters
