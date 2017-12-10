@@ -62,7 +62,7 @@ since child traversal is determined when the parent is visited.
     This **does not** mean checking starts at the deepest node and
     continues on to the highest node
 
-#### `stop? = visitor(node, index, parent)`
+#### `next? = visitor(node, index, parent)`
 
 Invoked when a node (matching `test`, if given) is found.
 
@@ -74,7 +74,10 @@ Invoked when a node (matching `test`, if given) is found.
 
 ###### Returns
 
-`boolean?` - When `false`, visiting is immediately stopped.
+*   `visit.EXIT` (`false`)
+    — Stop visiting immediately
+*   `visit.CONTINUE` (`true`)
+    — Continue visiting as normal (same behaviour as not returning anything)
 
 ## Related
 
@@ -129,7 +132,7 @@ repository, organisation, or community you agree to abide by its terms.
 
 [is]: https://github.com/syntax-tree/unist-util-is#istest-node-index-parent-context
 
-[visitor]: #stop--visitornode-index-parent
+[visitor]: #next--visitornode-index-parent
 
 [gh-9]: https://github.com/syntax-tree/unist-util-visit/issues/9
 

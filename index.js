@@ -3,6 +3,9 @@
 /* Expose. */
 module.exports = visit;
 
+visit.CONTINUE = true;
+visit.EXIT = false;
+
 var is = require('unist-util-is');
 
 /* Visit. */
@@ -25,7 +28,7 @@ function visit(tree, test, visitor, reverse) {
       result = visitor(node, index, parent || null);
     }
 
-    if (node.children && result !== false) {
+    if (node.children && result !== visit.EXIT) {
       return all(node.children, node);
     }
 
@@ -39,17 +42,19 @@ function visit(tree, test, visitor, reverse) {
     var min = -1;
     var index = (reverse ? max : min) + step;
     var child;
+    var result;
 
     while (index > min && index < max) {
       child = children[index];
+      result = child && one(child, index, parent);
 
-      if (child && one(child, index, parent) === false) {
-        return false;
+      if (result === visit.EXIT) {
+        return result;
       }
 
       index += step;
     }
 
-    return true;
+    return visit.CONTINUE;
   }
 }
