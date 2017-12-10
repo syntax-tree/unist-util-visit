@@ -1,15 +1,17 @@
 'use strict';
 
-/* Expose. */
 module.exports = visit;
-
-visit.CONTINUE = true;
-visit.SKIP = 'skip';
-visit.EXIT = false;
 
 var is = require('unist-util-is');
 
-/* Visit. */
+var CONTINUE = true;
+var SKIP = 'skip';
+var EXIT = false;
+
+visit.CONTINUE = CONTINUE;
+visit.SKIP = SKIP;
+visit.EXIT = EXIT;
+
 function visit(tree, test, visitor, reverse) {
   if (typeof test === 'function' && typeof visitor !== 'function') {
     reverse = visitor;
@@ -29,15 +31,15 @@ function visit(tree, test, visitor, reverse) {
       result = visitor(node, index, parent || null);
     }
 
-    if (result === visit.EXIT) {
+    if (result === EXIT) {
       return result;
     }
 
-    if (node.children && result !== visit.SKIP) {
+    if (node.children && result !== SKIP) {
       return all(node.children, node);
     }
 
-    return visit.CONTINUE;
+    return CONTINUE;
   }
 
   /* Visit children in `parent`. */
@@ -53,13 +55,13 @@ function visit(tree, test, visitor, reverse) {
       child = children[index];
       result = child && one(child, index, parent);
 
-      if (result === visit.EXIT) {
+      if (result === EXIT) {
         return result;
       }
 
       index += step;
     }
 
-    return visit.CONTINUE;
+    return CONTINUE;
   }
 }
