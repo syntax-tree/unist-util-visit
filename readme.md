@@ -135,11 +135,11 @@ repository, organisation, or community you agree to abide by its terms.
 
 [unist]: https://github.com/syntax-tree/unist
 
-[retext]: https://github.com/wooorm/retext
+[retext]: https://github.com/retextjs/retext
 
-[remark]: https://github.com/wooorm/remark
+[remark]: https://github.com/remarkjs/remark
 
-[rehype]: https://github.com/wooorm/rehype
+[rehype]: https://github.com/rehypejs/rehype
 
 [node]: https://github.com/syntax-tree/unist#node
 
