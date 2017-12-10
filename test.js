@@ -1,8 +1,9 @@
 'use strict';
 
+var assert = require('assert');
 var test = require('tape');
 var remark = require('remark');
-var visit = require('./index.js');
+var visit = require('./');
 
 var tree = remark().parse('Some _emphasis_, **importance**, and `code`.');
 
@@ -45,6 +46,7 @@ test('unist-util-visit', function (t) {
     function () {
       visit();
     },
+    /TypeError: visitor is not a function/,
     'should fail without tree'
   );
 
@@ -52,130 +54,187 @@ test('unist-util-visit', function (t) {
     function () {
       visit(tree);
     },
+    /TypeError: visitor is not a function/,
     'should fail without visitor'
   );
 
   t.test('should iterate over all nodes', function (st) {
-    var n = -1;
+    var n = 0;
 
-    visit(tree, function (node) {
-      st.equal(node.type, types[++n]);
-    });
+    st.doesNotThrow(
+      function () {
+        visit(tree, visitor);
+      },
+      'should visit all nodes (#1)'
+    );
 
-    st.equal(n, types.length - 1, 'should visit all nodes');
+    st.equal(n, types.length, 'should visit all nodes (#2)');
 
     st.end();
+
+    function visitor(node) {
+      assert.equal(node.type, types[n++], 'should be the expected type');
+    }
   });
 
   t.test('should iterate over all nodes, backwards', function (st) {
-    var n = -1;
+    var n = 0;
 
-    visit(tree, function (node) {
-      st.equal(node.type, reverseTypes[++n]);
-    }, true);
+    st.doesNotThrow(
+      function () {
+        visit(tree, visitor, true);
+      },
+      'should visit all nodes in reverse (#1)'
+    );
 
-    st.equal(n, reverseTypes.length - 1, 'should visit all nodes');
+    st.equal(n, reverseTypes.length, 'should visit all nodes in reverse (#2)');
 
     st.end();
+
+    function visitor(node) {
+      assert.equal(node.type, reverseTypes[n++], 'should be the expected type');
+    }
   });
 
   t.test('should only visit a given `type`', function (st) {
     var n = 0;
 
-    visit(tree, 'text', function (node) {
-      n++;
-      st.equal(node.type, 'text');
-    });
+    st.doesNotThrow(
+      function () {
+        visit(tree, 'text', visitor);
+      },
+      'should visit all matching nodes (#1)'
+    );
 
-    st.equal(n, textNodes, 'should visit all matching nodes');
+    st.equal(n, textNodes, 'should visit all matching nodes (#2)');
 
     st.end();
+
+    function visitor(node) {
+      n++;
+      assert.equal(node.type, 'text', 'should be the expected type');
+    }
   });
 
   t.test('should only visit given `type`s', function (st) {
     var n = 0;
     var types = ['text', 'inlineCode'];
 
-    visit(tree, types, function (node) {
-      n++;
-      st.ok(types.indexOf(node.type) !== -1, 'should be a requested type: ' + node.type);
-    });
+    st.doesNotThrow(
+      function () {
+        visit(tree, types, visitor);
+      },
+      'should visit all matching nodes (#1)'
+    );
 
-    st.equal(n, textNodes + codeNodes, 'should visit all matching nodes');
+    st.equal(n, textNodes + codeNodes, 'should visit all matching nodes (#2)');
 
     st.end();
+
+    function visitor(node) {
+      n++;
+      assert.notEqual(types.indexOf(node.type), -1, 'should be a requested type: ' + node.type);
+    }
   });
 
-  t.test('should accept any `is`-compatible test', function (st) {
+  t.test('should accept any `is`-compatible test function', function (st) {
     var n = 0;
-    var test = function (node, index) {
-      return index > 3;
-    };
 
-    visit(tree, test, function (node, index, parent) {
-      n++;
-      var parentType = parent && parent.type;
-      st.ok(index > 3, 'should be a requested node: ' + parentType + '/[' + index + ']');
-    });
+    st.doesNotThrow(
+      function () {
+        visit(tree, test, visitor);
+      },
+      'should visit all passing nodes (#1)'
+    );
 
-    st.equal(n, 3, 'should visit all matching nodes');
+    st.equal(n, 3, 'should visit all passing nodes (#2)');
 
     st.end();
+
+    function visitor(node, index, parent) {
+      var parentType = parent && parent.type;
+      n++;
+      assert.ok(index > 3, 'should be a requested node (' + parentType + ':' + index + ')');
+    }
+
+    function test(node, index) {
+      return index > 3;
+    }
   });
 
   t.test('should accept an array of `is`-compatible tests', function (st) {
     var n = 0;
-    var tests = [
-      function (node) {
-        return node.type === 'root';
+    var expected = ['root', 'paragraph', 'emphasis', 'strong'];
+
+    st.doesNotThrow(
+      function () {
+        visit(tree, [test, 'paragraph', {value: '.'}, ['emphasis', 'strong']], visitor);
       },
-      'paragraph',
-      {value: '.'},
-      ['emphasis', 'strong']
-    ];
-    var expectedTypes = ['root', 'paragraph', 'emphasis', 'strong'];
+      'should visit all passing nodes (#1)'
+    );
 
-    visit(tree, tests, function (node) {
-      n++;
-      st.ok(expectedTypes.indexOf(node.type) !== -1 || node.value === '.',
-          'should be a requested type: ' + node.type);
-    });
-
-    st.equal(n, 5, 'should visit all matching nodes');
+    st.equal(n, 5, 'should visit all passing nodes (#2)');
 
     st.end();
+
+    function visitor(node) {
+      n++;
+
+      assert.ok(
+        expected.indexOf(node.type) !== -1 || node.value === '.',
+        'should be a requested type: ' + node.type
+      );
+    }
+
+    function test(node) {
+      return node.type === 'root';
+    }
   });
 
   t.test('should stop if `visitor` stops', function (st) {
-    var n = -1;
+    var n = 0;
 
-    visit(tree, function (node) {
-      st.equal(node.type, types[++n]);
+    st.doesNotThrow(
+      function () {
+        visit(tree, visitor);
+      },
+      'should visit nodes until `visit.EXIT` is given (#1)'
+    );
 
-      if (n === STOP) {
-        return false;
-      }
-    });
-
-    st.equal(n, STOP, 'should visit all nodes');
+    st.equal(n, STOP, 'should visit nodes until `visit.EXIT` is given (#2)');
 
     st.end();
+
+    function visitor(node) {
+      assert.equal(node.type, types[n++], 'should be the expected type');
+
+      if (n === STOP) {
+        return visit.EXIT;
+      }
+    }
   });
 
   t.test('should stop if `visitor` stops, backwards', function (st) {
-    var n = -1;
+    var n = 0;
 
-    visit(tree, function (node) {
-      st.equal(node.type, reverseTypes[++n]);
+    st.doesNotThrow(
+      function () {
+        visit(tree, visitor, true);
+      },
+      'should visit nodes until `visit.EXIT` is given (#1)'
+    );
 
-      if (n === STOP) {
-        return false;
-      }
-    }, true);
-
-    st.equal(n, STOP, 'should visit all nodes');
+    st.equal(n, STOP, 'should visit nodes until `visit.EXIT` is given (#2)');
 
     st.end();
+
+    function visitor(node) {
+      assert.equal(node.type, reverseTypes[n++], 'should be the expected type');
+
+      if (n === STOP) {
+        return visit.EXIT;
+      }
+    }
   });
 
   t.end();
