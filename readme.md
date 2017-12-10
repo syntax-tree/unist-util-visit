@@ -1,6 +1,6 @@
 # unist-util-visit [![Build Status][build-badge]][build-page] [![Coverage Status][coverage-badge]][coverage-page]
 
-[Unist][] node visitor.  Useful when working with [**remark**][remark],
+[unist][] node visitor.  Useful when working with [**remark**][remark],
 [**retext**][retext], or [**rehype**][rehype].
 
 ## Installation
@@ -17,7 +17,7 @@ npm install unist-util-visit
 var remark = require('remark');
 var visit = require('unist-util-visit');
 
-var tree = remark.parse('Some _emphasis_, **importance**, and `code`.');
+var tree = remark().parse('Some _emphasis_, **importance**, and `code`.');
 
 visit(tree, 'text', visitor);
 
@@ -29,24 +29,20 @@ function visitor(node) {
 Yields:
 
 ```js
-{ type: 'text', value: 'Some ' }
-{ type: 'text', value: 'emphasis' }
-{ type: 'text', value: ', ' }
-{ type: 'text', value: 'importance' }
-{ type: 'text', value: ', and ' }
-{ type: 'text', value: '.' }
+{type: 'text', value: 'Some '}
+{type: 'text', value: 'emphasis'}
+{type: 'text', value: ', '}
+{type: 'text', value: 'importance'}
+{type: 'text', value: ', and '}
+{type: 'text', value: '.'}
 ```
 
 ## API
 
-### `visit(node[, test], visitor[, reverse])`
+### `visit(tree[, test], visitor[, reverse])`
 
-Visit nodes.  Optionally filtering nodes.  Optionally in reverse.
-
-Note that you can also use a visitor to mutate the items, as long as [it does
-not change the child traversal order][gh-9], such as add or delete sibling
-nodes.  Modifying a node’s parents within the visitor may not work as expected
-since child traversal is determined when the parent is visited.
+Visit nodes ([**inclusive descendants**][descendant] of `tree`).  Optionally
+filtering nodes.  Optionally in reverse.
 
 ###### Parameters
 
@@ -55,7 +51,7 @@ since child traversal is determined when the parent is visited.
 *   `test` ([`Test`][is], optional)
     — Node type or other [`is`][is]-compatible test
 *   `visitor` ([Function][visitor])
-    — Visitor invoked when a node is found
+    — Visitor invoked when a node is found that passes `test`
 *   `reverse` (`boolean`, default: `false`)
     — When falsey, checking starts at the first child and continues
     through to later children.  When truthy, this is reversed.
@@ -64,7 +60,9 @@ since child traversal is determined when the parent is visited.
 
 #### `next? = visitor(node, index, parent)`
 
-Invoked when a node (matching `test`, if given) is found.
+Invoked when a node (matching `test` if given) is found.
+
+You can transform visited nodes.
 
 ###### Parameters
 
@@ -75,12 +73,12 @@ Invoked when a node (matching `test`, if given) is found.
 ###### Returns
 
 *   `visit.EXIT` (`false`)
-    — Stop visiting immediately
+    — Stop traversing immediately
 *   `visit.CONTINUE` (`true`)
-    — Continue visiting as normal (same behaviour as not returning anything)
+    — Continue traversing as normal (same behaviour as not returning anything)
 *   `visit.SKIP` (`'skip'`)
-    — Do not enter this node (visiting its children), but continue with the
-    next sibling
+    — Do not enter this node (traversing into its children), but do continue
+    with the next sibling
 
 ## Related
 
@@ -133,11 +131,11 @@ repository, organisation, or community you agree to abide by its terms.
 
 [node]: https://github.com/syntax-tree/unist#node
 
+[descendant]: https://github.com/syntax-tree/unist#descendant
+
 [is]: https://github.com/syntax-tree/unist-util-is#istest-node-index-parent-context
 
 [visitor]: #next--visitornode-index-parent
-
-[gh-9]: https://github.com/syntax-tree/unist-util-visit/issues/9
 
 [contribute]: https://github.com/syntax-tree/unist/blob/master/contributing.md
 
