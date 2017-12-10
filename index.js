@@ -4,6 +4,7 @@
 module.exports = visit;
 
 visit.CONTINUE = true;
+visit.SKIP = 'skip';
 visit.EXIT = false;
 
 var is = require('unist-util-is');
@@ -28,11 +29,15 @@ function visit(tree, test, visitor, reverse) {
       result = visitor(node, index, parent || null);
     }
 
-    if (node.children && result !== visit.EXIT) {
+    if (result === visit.EXIT) {
+      return result;
+    }
+
+    if (node.children && result !== visit.SKIP) {
       return all(node.children, node);
     }
 
-    return result;
+    return visit.CONTINUE;
   }
 
   /* Visit children in `parent`. */

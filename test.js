@@ -8,6 +8,8 @@ var visit = require('./');
 var tree = remark().parse('Some _emphasis_, **importance**, and `code`.');
 
 var STOP = 5;
+var SKIP = 7;
+var SKIP_REVERSE = 6;
 
 var textNodes = 6;
 var codeNodes = 1;
@@ -233,6 +235,58 @@ test('unist-util-visit', function (t) {
 
       if (n === STOP) {
         return visit.EXIT;
+      }
+    }
+  });
+
+  t.test('should skip if `visitor` skips', function (st) {
+    var n = 0;
+    var count = 0;
+
+    st.doesNotThrow(
+      function () {
+        visit(tree, visitor);
+      },
+      'should visit nodes except when `visit.SKIP` is given (#1)'
+    );
+
+    st.equal(count, types.length - 1, 'should visit nodes except when `visit.SKIP` is given (#2)');
+
+    st.end();
+
+    function visitor(node) {
+      assert.equal(node.type, types[n++], 'should be the expected type');
+      count++;
+
+      if (n === SKIP) {
+        n++; /* The one node inside it. */
+        return visit.SKIP;
+      }
+    }
+  });
+
+  t.test('should skip if `visitor` skips, backwards', function (st) {
+    var n = 0;
+    var count = 0;
+
+    st.doesNotThrow(
+      function () {
+        visit(tree, visitor, true);
+      },
+      'should visit nodes except when `visit.SKIP` is given (#1)'
+    );
+
+    st.equal(count, reverseTypes.length - 1, 'should visit nodes except when `visit.SKIP` is given (#2)');
+
+    st.end();
+
+    function visitor(node) {
+      assert.equal(node.type, reverseTypes[n++], 'should be the expected type');
+      count++;
+
+      if (n === SKIP_REVERSE) {
+        n++; /* The one node inside it. */
+        return visit.SKIP;
       }
     }
   });

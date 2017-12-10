@@ -78,6 +78,9 @@ Invoked when a node (matching `test`, if given) is found.
     — Stop visiting immediately
 *   `visit.CONTINUE` (`true`)
     — Continue visiting as normal (same behaviour as not returning anything)
+*   `visit.SKIP` (`'skip'`)
+    — Do not enter this node (visiting its children), but continue with the
+    next sibling
 
 ## Related
 
