@@ -291,5 +291,121 @@ test('unist-util-visit', function (t) {
     }
   });
 
+  t.test('should support a given `index` to iterate over next (`0` to reiterate)', function (st) {
+    var n = 0;
+    var again = false;
+    var expected = [
+      'root',
+      'paragraph',
+      'text',
+      'emphasis',
+      'text',
+      'text',
+      'strong',
+      'text',
+      'text', /* Again. */
+      'emphasis',
+      'text',
+      'text',
+      'strong',
+      'text',
+      'text',
+      'inlineCode',
+      'text'
+    ];
+
+    st.doesNotThrow(
+      function () {
+        visit(tree, visitor);
+      },
+      'should visit nodes again (#1)'
+    );
+
+    st.equal(n, expected.length, 'should visit nodes again (#2)');
+
+    st.end();
+
+    function visitor(node) {
+      assert.equal(node.type, expected[n++], 'should be the expected type');
+
+      if (again === false && node.type === 'strong') {
+        again = true;
+        return 0; /* Start over. */
+      }
+    }
+  });
+
+  t.test('should support a given `index` to iterate over next (`children.length` to skip further children)', function (st) {
+    var n = 0;
+    var again = false;
+    var expected = [
+      'root',
+      'paragraph',
+      'text',
+      'emphasis',
+      'text',
+      'text',
+      'strong', /* Skip here. */
+      'text'
+    ];
+
+    st.doesNotThrow(
+      function () {
+        visit(tree, visitor);
+      },
+      'should skip nodes (#1)'
+    );
+
+    st.equal(n, expected.length, 'should skip nodes (#2)');
+
+    st.end();
+
+    function visitor(node, index, parent) {
+      assert.equal(node.type, expected[n++], 'should be the expected type');
+
+      if (again === false && node.type === 'strong') {
+        again = true;
+        return parent.children.length; /* Skip siblings. */
+      }
+    }
+  });
+
+  t.test('should support any other given `index` to iterate over next', function (st) {
+    var n = 0;
+    var again = false;
+    var expected = [
+      'root',
+      'paragraph',
+      'text',
+      'emphasis',
+      'text',
+      'text',
+      'strong',
+      'text',
+      'inlineCode', /* Skip to here. */
+      'text'
+    ];
+
+    st.doesNotThrow(
+      function () {
+        visit(tree, visitor);
+      },
+      'should skip nodes (#1)'
+    );
+
+    st.equal(n, expected.length, 'should skip nodes (#2)');
+
+    st.end();
+
+    function visitor(node, index) {
+      assert.equal(node.type, expected[n++], 'should be the expected type');
+
+      if (again === false && node.type === 'strong') {
+        again = true;
+        return index + 2; /* Skip to `inlineCode`. */
+      }
+    }
+  });
+
   t.end();
 });

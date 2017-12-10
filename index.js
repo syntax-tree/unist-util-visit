@@ -36,22 +36,20 @@ function visit(tree, test, visitor, reverse) {
     }
 
     if (node.children && result !== SKIP) {
-      return all(node.children, node);
+      return all(node.children, node) === EXIT ? EXIT : result;
     }
 
-    return CONTINUE;
+    return result;
   }
 
   /* Visit children in `parent`. */
   function all(children, parent) {
     var step = reverse ? -1 : 1;
-    var max = children.length;
-    var min = -1;
-    var index = (reverse ? max : min) + step;
+    var index = (reverse ? children.length : -1) + step;
     var child;
     var result;
 
-    while (index > min && index < max) {
+    while (index > -1 && index < children.length) {
       child = children[index];
       result = child && one(child, index, parent);
 
@@ -59,7 +57,7 @@ function visit(tree, test, visitor, reverse) {
         return result;
       }
 
-      index += step;
+      index = typeof result === 'number' ? result : index + step;
     }
 
     return CONTINUE;

@@ -62,7 +62,13 @@ filtering nodes.  Optionally in reverse.
 
 Invoked when a node (matching `test` if given) is found.
 
-You can transform visited nodes.
+You can transform visited nodes.  You can transform `parent`, but if adding or
+removing [**children**][child] before `index`, you should return a new `index`
+(`number`) from `visitor` to specify the next sibling to visit.  Replacing
+`node` itself still causes its descendants to be visited.  Adding or removing
+nodes after `index` is handled as expected without needing to return a new
+`index`.  Remove the `children` property on `parent` still results in them
+being traversed.
 
 ###### Parameters
 
@@ -79,6 +85,12 @@ You can transform visited nodes.
 *   `visit.SKIP` (`'skip'`)
     — Do not enter this node (traversing into its children), but do continue
     with the next sibling
+*   `index` (`number`)
+    — Move to the sibling at position `index` next (after `node` itself is
+    traversed).  Useful if you’re mutating the tree (such as removing the node
+    you’re currently on, or any of its preceding siblings).  Results less than
+    `0` or greater than or equal to `children.length` stop iteration of the
+    parent
 
 ## Related
 
@@ -132,6 +144,8 @@ repository, organisation, or community you agree to abide by its terms.
 [node]: https://github.com/syntax-tree/unist#node
 
 [descendant]: https://github.com/syntax-tree/unist#descendant
+
+[child]: https://github.com/syntax-tree/unist#child
 
 [is]: https://github.com/syntax-tree/unist-util-is#istest-node-index-parent-context
 
