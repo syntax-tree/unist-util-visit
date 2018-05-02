@@ -3,7 +3,7 @@
 var assert = require('assert');
 var test = require('tape');
 var remark = require('remark');
-var visit = require('./');
+var visit = require('.');
 
 var tree = remark().parse('Some _emphasis_, **importance**, and `code`.');
 
