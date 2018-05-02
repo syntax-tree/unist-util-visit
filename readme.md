@@ -14,15 +14,15 @@ npm install unist-util-visit
 ## Usage
 
 ```javascript
-var remark = require('remark');
-var visit = require('unist-util-visit');
+var remark = require('remark')
+var visit = require('unist-util-visit')
 
-var tree = remark().parse('Some _emphasis_, **importance**, and `code`.');
+var tree = remark().parse('Some _emphasis_, **importance**, and `code`.')
 
-visit(tree, 'text', visitor);
+visit(tree, 'text', visitor)
 
 function visitor(node) {
-  console.log(node);
+  console.log(node)
 }
 ```
 
