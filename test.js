@@ -11,8 +11,8 @@ var STOP = 5
 var SKIP = 7
 var SKIP_REVERSE = 6
 
-var textNodes = 6
-var codeNodes = 1
+var texts = 6
+var codes = 1
 
 var types = [
   'root',
@@ -63,92 +63,77 @@ test('unist-util-visit', function(t) {
   t.test('should iterate over all nodes', function(st) {
     var n = 0
 
-    st.doesNotThrow(function() {
-      visit(tree, visitor)
-    }, 'should visit all nodes (#1)')
+    visit(tree, visitor)
 
-    st.equal(n, types.length, 'should visit all nodes (#2)')
+    st.equal(n, types.length, 'should visit all nodes')
 
     st.end()
 
     function visitor(node) {
-      assert.equal(node.type, types[n++], 'should be the expected type')
+      assert.equal(node.type, types[n], 'should be the expected type')
+      n++
     }
   })
 
   t.test('should iterate over all nodes, backwards', function(st) {
     var n = 0
 
-    st.doesNotThrow(function() {
-      visit(tree, visitor, true)
-    }, 'should visit all nodes in reverse (#1)')
+    visit(tree, visitor, true)
 
-    st.equal(n, reverseTypes.length, 'should visit all nodes in reverse (#2)')
+    st.equal(n, reverseTypes.length, 'should visit all nodes in reverse')
 
     st.end()
 
     function visitor(node) {
-      assert.equal(node.type, reverseTypes[n++], 'should be the expected type')
+      assert.equal(node.type, reverseTypes[n], 'should be the expected type')
+      n++
     }
   })
 
   t.test('should only visit a given `type`', function(st) {
     var n = 0
 
-    st.doesNotThrow(function() {
-      visit(tree, 'text', visitor)
-    }, 'should visit all matching nodes (#1)')
+    visit(tree, 'text', visitor)
 
-    st.equal(n, textNodes, 'should visit all matching nodes (#2)')
+    st.equal(n, texts, 'should visit all matching nodes')
 
     st.end()
 
     function visitor(node) {
-      n++
       assert.equal(node.type, 'text', 'should be the expected type')
+      n++
     }
   })
 
   t.test('should only visit given `type`s', function(st) {
-    var n = 0
     var types = ['text', 'inlineCode']
+    var n = 0
 
-    st.doesNotThrow(function() {
-      visit(tree, types, visitor)
-    }, 'should visit all matching nodes (#1)')
+    visit(tree, types, visitor)
 
-    st.equal(n, textNodes + codeNodes, 'should visit all matching nodes (#2)')
+    st.equal(n, texts + codes, 'should visit all matching nodes')
 
     st.end()
 
     function visitor(node) {
       n++
-      assert.notEqual(
-        types.indexOf(node.type),
-        -1,
-        'should be a requested type: ' + node.type
-      )
+      assert.notEqual(types.indexOf(node.type), -1, 'should match')
     }
   })
 
   t.test('should accept any `is`-compatible test function', function(st) {
     var n = 0
 
-    st.doesNotThrow(function() {
-      visit(tree, test, visitor)
-    }, 'should visit all passing nodes (#1)')
+    visit(tree, test, visitor)
 
-    st.equal(n, 3, 'should visit all passing nodes (#2)')
+    st.equal(n, 3, 'should visit all passing nodes')
 
     st.end()
 
     function visitor(node, index, parent) {
-      var parentType = parent && parent.type
+      var info = '(' + (parent && parent.type) + ':' + index + ')'
+      assert.ok(test(node, index), 'should be a requested node ' + info)
       n++
-      assert.ok(
-        index > 3,
-        'should be a requested node (' + parentType + ':' + index + ')'
-      )
     }
 
     function test(node, index) {
@@ -157,28 +142,20 @@ test('unist-util-visit', function(t) {
   })
 
   t.test('should accept an array of `is`-compatible tests', function(st) {
-    var n = 0
     var expected = ['root', 'paragraph', 'emphasis', 'strong']
+    var tests = [test, 'paragraph', {value: '.'}, ['emphasis', 'strong']]
+    var n = 0
 
-    st.doesNotThrow(function() {
-      visit(
-        tree,
-        [test, 'paragraph', {value: '.'}, ['emphasis', 'strong']],
-        visitor
-      )
-    }, 'should visit all passing nodes (#1)')
+    visit(tree, tests, visitor)
 
-    st.equal(n, 5, 'should visit all passing nodes (#2)')
+    st.equal(n, 5, 'should visit all passing nodes')
 
     st.end()
 
     function visitor(node) {
+      var ok = expected.indexOf(node.type) !== -1 || node.value === '.'
+      assert.ok(ok, 'should be a requested type: ' + node.type)
       n++
-
-      assert.ok(
-        expected.indexOf(node.type) !== -1 || node.value === '.',
-        'should be a requested type: ' + node.type
-      )
     }
 
     function test(node) {
@@ -189,40 +166,30 @@ test('unist-util-visit', function(t) {
   t.test('should stop if `visitor` stops', function(st) {
     var n = 0
 
-    st.doesNotThrow(function() {
-      visit(tree, visitor)
-    }, 'should visit nodes until `visit.EXIT` is given (#1)')
+    visit(tree, visitor)
 
-    st.equal(n, STOP, 'should visit nodes until `visit.EXIT` is given (#2)')
+    st.equal(n, STOP, 'should visit nodes until `visit.EXIT` is given')
 
     st.end()
 
     function visitor(node) {
       assert.equal(node.type, types[n++], 'should be the expected type')
-
-      if (n === STOP) {
-        return visit.EXIT
-      }
+      return n === STOP ? visit.EXIT : visit.CONTINUE
     }
   })
 
   t.test('should stop if `visitor` stops, backwards', function(st) {
     var n = 0
 
-    st.doesNotThrow(function() {
-      visit(tree, visitor, true)
-    }, 'should visit nodes until `visit.EXIT` is given (#1)')
+    visit(tree, visitor, true)
 
-    st.equal(n, STOP, 'should visit nodes until `visit.EXIT` is given (#2)')
+    st.equal(n, STOP, 'should visit nodes until `visit.EXIT` is given')
 
     st.end()
 
     function visitor(node) {
       assert.equal(node.type, reverseTypes[n++], 'should be the expected type')
-
-      if (n === STOP) {
-        return visit.EXIT
-      }
+      return n === STOP ? visit.EXIT : visit.CONTINUE
     }
   })
 
@@ -230,14 +197,12 @@ test('unist-util-visit', function(t) {
     var n = 0
     var count = 0
 
-    st.doesNotThrow(function() {
-      visit(tree, visitor)
-    }, 'should visit nodes except when `visit.SKIP` is given (#1)')
+    visit(tree, visitor)
 
     st.equal(
       count,
       types.length - 1,
-      'should visit nodes except when `visit.SKIP` is given (#2)'
+      'should visit nodes except when `visit.SKIP` is given'
     )
 
     st.end()
@@ -257,14 +222,12 @@ test('unist-util-visit', function(t) {
     var n = 0
     var count = 0
 
-    st.doesNotThrow(function() {
-      visit(tree, visitor, true)
-    }, 'should visit nodes except when `visit.SKIP` is given (#1)')
+    visit(tree, visitor, true)
 
     st.equal(
       count,
       reverseTypes.length - 1,
-      'should visit nodes except when `visit.SKIP` is given (#2)'
+      'should visit nodes except when `visit.SKIP` is given'
     )
 
     st.end()
@@ -305,11 +268,9 @@ test('unist-util-visit', function(t) {
         'text'
       ]
 
-      st.doesNotThrow(function() {
-        visit(tree, visitor)
-      }, 'should visit nodes again (#1)')
+      visit(tree, visitor)
 
-      st.equal(n, expected.length, 'should visit nodes again (#2)')
+      st.equal(n, expected.length, 'should visit nodes again')
 
       st.end()
 
@@ -340,11 +301,9 @@ test('unist-util-visit', function(t) {
         'text'
       ]
 
-      st.doesNotThrow(function() {
-        visit(tree, visitor)
-      }, 'should skip nodes (#1)')
+      visit(tree, visitor)
 
-      st.equal(n, expected.length, 'should skip nodes (#2)')
+      st.equal(n, expected.length, 'should skip nodes')
 
       st.end()
 
@@ -377,11 +336,9 @@ test('unist-util-visit', function(t) {
         'text'
       ]
 
-      st.doesNotThrow(function() {
-        visit(tree, visitor)
-      }, 'should skip nodes (#1)')
+      visit(tree, visitor)
 
-      st.equal(n, expected.length, 'should skip nodes (#2)')
+      st.equal(n, expected.length, 'should skip nodes')
 
       st.end()
 
