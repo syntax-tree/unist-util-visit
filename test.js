@@ -121,6 +121,39 @@ test('unist-util-visit', function(t) {
     }
   })
 
+  t.test(
+    'should visit every matched input nodes even if the tree is mutated',
+    function(st) {
+      var tree = remark().parse('Some _emphasis_, **importance**, and `code`.')
+      var n = 0
+
+      visit(tree, 'text', visitor)
+
+      st.equal(n, texts, 'should visit all matching nodes')
+
+      st.end()
+
+      function visitor(node, index, parent) {
+        if (n === 2) {
+          parent.children.splice(
+            index,
+            1,
+            {
+              type: 'emphasis',
+              value: 'new node 1'
+            },
+            {
+              type: 'emphasis',
+              value: 'new node 2'
+            }
+          )
+        }
+        assert.equal(node.type, 'text', 'should be the expected type')
+        n++
+      }
+    }
+  )
+
   t.test('should accept any `is`-compatible test function', function(st) {
     var n = 0
 
