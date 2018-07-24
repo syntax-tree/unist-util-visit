@@ -353,5 +353,26 @@ test('unist-util-visit', function(t) {
     }
   )
 
+  t.test('should visit added nodes', function(st) {
+    var tree = remark().parse('Some _emphasis_, **importance**, and `code`.')
+    var other = remark().parse('Another ~~sentence~~.').children[0]
+    var l = types.length + 5 // (p, text, delete, text, text)
+    var n = 0
+
+    visit(tree, visitor)
+
+    st.equal(n, l, 'should walk over all nodes')
+
+    st.end()
+
+    function visitor(node, index, parent) {
+      n++
+
+      if (n === 2) {
+        parent.children.push(other)
+      }
+    }
+  })
+
   t.end()
 })
