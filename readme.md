@@ -88,7 +88,7 @@ repository, organisation, or community you agree to abide by its terms.
 
 [npm]: https://docs.npmjs.com/cli/install
 
-[license]: LICENSE
+[license]: license
 
 [author]: http://wooorm.com
 
