@@ -70,7 +70,7 @@ test('unist-util-visit', function(t) {
     st.end()
 
     function visitor(node) {
-      assert.equal(node.type, types[n], 'should be the expected type')
+      assert.strictEqual(node.type, types[n], 'should be the expected type')
       n++
     }
   })
@@ -85,7 +85,11 @@ test('unist-util-visit', function(t) {
     st.end()
 
     function visitor(node) {
-      assert.equal(node.type, reverseTypes[n], 'should be the expected type')
+      assert.strictEqual(
+        node.type,
+        reverseTypes[n],
+        'should be the expected type'
+      )
       n++
     }
   })
@@ -100,7 +104,7 @@ test('unist-util-visit', function(t) {
     st.end()
 
     function visitor(node) {
-      assert.equal(node.type, 'text', 'should be the expected type')
+      assert.strictEqual(node.type, 'text', 'should be the expected type')
       n++
     }
   })
@@ -117,7 +121,7 @@ test('unist-util-visit', function(t) {
 
     function visitor(node) {
       n++
-      assert.notEqual(types.indexOf(node.type), -1, 'should match')
+      assert.notStrictEqual(types.indexOf(node.type), -1, 'should match')
     }
   })
 
@@ -173,7 +177,7 @@ test('unist-util-visit', function(t) {
     st.end()
 
     function visitor(node) {
-      assert.equal(node.type, types[n++], 'should be the expected type')
+      assert.strictEqual(node.type, types[n++], 'should be the expected type')
       return n === STOP ? visit.EXIT : visit.CONTINUE
     }
   })
@@ -188,7 +192,11 @@ test('unist-util-visit', function(t) {
     st.end()
 
     function visitor(node) {
-      assert.equal(node.type, reverseTypes[n++], 'should be the expected type')
+      assert.strictEqual(
+        node.type,
+        reverseTypes[n++],
+        'should be the expected type'
+      )
       return n === STOP ? visit.EXIT : visit.CONTINUE
     }
   })
@@ -208,7 +216,7 @@ test('unist-util-visit', function(t) {
     st.end()
 
     function visitor(node) {
-      assert.equal(node.type, types[n++], 'should be the expected type')
+      assert.strictEqual(node.type, types[n++], 'should be the expected type')
       count++
 
       if (n === SKIP) {
@@ -233,7 +241,11 @@ test('unist-util-visit', function(t) {
     st.end()
 
     function visitor(node) {
-      assert.equal(node.type, reverseTypes[n++], 'should be the expected type')
+      assert.strictEqual(
+        node.type,
+        reverseTypes[n++],
+        'should be the expected type'
+      )
       count++
 
       if (n === SKIP_REVERSE) {
@@ -275,7 +287,11 @@ test('unist-util-visit', function(t) {
       st.end()
 
       function visitor(node) {
-        assert.equal(node.type, expected[n++], 'should be the expected type')
+        assert.strictEqual(
+          node.type,
+          expected[n++],
+          'should be the expected type'
+        )
 
         if (again === false && node.type === 'strong') {
           again = true
@@ -308,7 +324,11 @@ test('unist-util-visit', function(t) {
       st.end()
 
       function visitor(node, index, parent) {
-        assert.equal(node.type, expected[n++], 'should be the expected type')
+        assert.strictEqual(
+          node.type,
+          expected[n++],
+          'should be the expected type'
+        )
 
         if (again === false && node.type === 'strong') {
           again = true
@@ -343,7 +363,11 @@ test('unist-util-visit', function(t) {
       st.end()
 
       function visitor(node, index) {
-        assert.equal(node.type, expected[n++], 'should be the expected type')
+        assert.strictEqual(
+          node.type,
+          expected[n++],
+          'should be the expected type'
+        )
 
         if (again === false && node.type === 'strong') {
           again = true
