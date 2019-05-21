@@ -5,10 +5,9 @@
 [![Downloads][downloads-badge]][downloads]
 [![Size][size-badge]][size]
 
-[unist][] node visitor.  Useful when working with [**remark**][remark],
-[**retext**][retext], or [**rehype**][rehype].
+[**unist**][unist] utility to visit nodes.
 
-## Installation
+## Install
 
 [npm][]:
 
@@ -19,27 +18,27 @@ npm install unist-util-visit
 ## Usage
 
 ```javascript
-var remark = require('remark')
+var u = require('unist-builder')
 var visit = require('unist-util-visit')
 
-var tree = remark().parse('Some _emphasis_, **importance**, and `code`.')
+var tree = u('tree', [
+  u('leaf', '1'),
+  u('node', [u('leaf', '2')]),
+  u('void'),
+  u('leaf', '3')
+])
 
-visit(tree, 'text', visitor)
-
-function visitor(node) {
+visit(tree, 'leaf', function(node) {
   console.log(node)
-}
+})
 ```
 
 Yields:
 
 ```js
-{type: 'text', value: 'Some '}
-{type: 'text', value: 'emphasis'}
-{type: 'text', value: ', '}
-{type: 'text', value: 'importance'}
-{type: 'text', value: ', and '}
-{type: 'text', value: '.'}
+{ type: 'leaf', value: '1' }
+{ type: 'leaf', value: '2' }
+{ type: 'leaf', value: '3' }
 ```
 
 ## API
@@ -71,11 +70,13 @@ Otherwise the same as [`unist-util-visit-parents`][vp].
 
 ## Contribute
 
-See [`contributing.md` in `syntax-tree/unist`][contributing] for ways to get
+See [`contributing.md` in `syntax-tree/.github`][contributing] for ways to get
 started.
+See [`support.md`][support] for ways to get help.
 
-This organisation has a [Code of Conduct][coc].  By interacting with this
-repository, organisation, or community you agree to abide by its terms.
+This project has a [Code of Conduct][coc].
+By interacting with this repository, organisation, or community you agree to
+abide by its terms.
 
 ## License
 
@@ -105,17 +106,13 @@ repository, organisation, or community you agree to abide by its terms.
 
 [author]: https://wooorm.com
 
+[contributing]: https://github.com/syntax-tree/.github/blob/master/contributing.md
+
+[support]: https://github.com/syntax-tree/.github/blob/master/support.md
+
+[coc]: https://github.com/syntax-tree/.github/blob/master/code-of-conduct.md
+
 [unist]: https://github.com/syntax-tree/unist
-
-[retext]: https://github.com/retextjs/retext
-
-[remark]: https://github.com/remarkjs/remark
-
-[rehype]: https://github.com/rehypejs/rehype
-
-[contributing]: https://github.com/syntax-tree/unist/blob/master/contributing.md
-
-[coc]: https://github.com/syntax-tree/unist/blob/master/code-of-conduct.md
 
 [vp]: https://github.com/syntax-tree/unist-util-visit-parents
 
