@@ -42,7 +42,6 @@ var reverseTypes = [
   'text'
 ]
 
-/* Tests. */
 test('unist-util-visit', function(t) {
   t.throws(
     function() {
@@ -220,7 +219,7 @@ test('unist-util-visit', function(t) {
       count++
 
       if (n === SKIP) {
-        n++ /* The one node inside it. */
+        n++ // The one node inside it.
         return visit.SKIP
       }
     }
@@ -249,7 +248,7 @@ test('unist-util-visit', function(t) {
       count++
 
       if (n === SKIP_REVERSE) {
-        n++ /* The one node inside it. */
+        n++ // The one node inside it.
         return visit.SKIP
       }
     }
@@ -269,7 +268,7 @@ test('unist-util-visit', function(t) {
         'text',
         'strong',
         'text',
-        'text' /* Again. */,
+        'text', // Again.
         'emphasis',
         'text',
         'text',
@@ -295,7 +294,7 @@ test('unist-util-visit', function(t) {
 
         if (again === false && node.type === 'strong') {
           again = true
-          return 0 /* Start over. */
+          return 0 // Start over.
         }
       }
     }
@@ -313,7 +312,7 @@ test('unist-util-visit', function(t) {
         'emphasis',
         'text',
         'text',
-        'strong' /* Skip here. */,
+        'strong', // Skip here
         'text'
       ]
 
@@ -332,7 +331,7 @@ test('unist-util-visit', function(t) {
 
         if (again === false && node.type === 'strong') {
           again = true
-          return parent.children.length /* Skip siblings. */
+          return parent.children.length // Skip siblings.
         }
       }
     }
@@ -352,7 +351,7 @@ test('unist-util-visit', function(t) {
         'text',
         'strong',
         'text',
-        'inlineCode' /* Skip to here. */,
+        'inlineCode', // Skip to here.
         'text'
       ]
 
@@ -371,7 +370,7 @@ test('unist-util-visit', function(t) {
 
         if (again === false && node.type === 'strong') {
           again = true
-          return index + 2 /* Skip to `inlineCode`. */
+          return index + 2 // Skip to `inlineCode`.
         }
       }
     }
