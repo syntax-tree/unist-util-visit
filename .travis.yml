@@ -1,7 +1,7 @@
 language: node_js
 node_js:
-- lts/boron
-- node
+  - lts/dubnium
+  - node
 after_script: bash <(curl -s https://codecov.io/bash)
 deploy:
   provider: releases
@@ -9,7 +9,7 @@ deploy:
   api_key:
     secure: gRby4w9AX4L8lYpN9Yf5yyxEL0/kuRr+uYp9GgZwkGlrMGa0Fx1GBCFMbtItiLshJ6fkrkoTyBp6ttbUpInSUA5OYtRsxL+98+OdZ7qwHHqLAbLzUnYZk23hkWjm/MczQMPaOvhCO9Jtms1KgcVlIQkV7Ba9uOEBOAiF9wMxzQVI/mzNYz+r5/WRSrjQX1Iu7eJhLCvG7OJ0zPvzZpXdBV8T7M9N6FvDvog9YM6VmWzvIBY4bRHEtzrku5cK6NqkrKtK0tzQHHESSSO1m6UWV1/tUM34oSiudZBVK/0OLIJakwwz9HFaKtCEhMGR2Io1YMgfDKXsoLfGZpIJ7tAwc/ca6UyO5dk2TgIQiDlFSEtF7Xlvz2lBU2kQFrWDksWWWkE37Lsh/2PxUMPXhManiuoXNh01tSqPG9qfPJuOt83+P6kLlIzSvY3yLSrrs/5SXRPyJRGEhL2Pt5bvrkqF3ObHfYlO5T6ST1YT0z56/4wM6LKBY/jv+6J57Na7uXjCEeMJI2WcZOxLK5LfGrLK+5jF43ipB8wXhVkCWNDroADg9zBsxha2itAy6seXdeClBJNRLGyx/5aLz+ja5VjpP0jMcnKr/WY6sYXzwnDBo/+MvAEVDBpmA9OtdjtIqiX0Zk2bARmRrwEFK7Jh6fi59oUy1aA9AyoHVu9kNVDC+sU=
   file:
-    - "unist-util-visit.js"
-    - "unist-util-visit.min.js"
+    - 'unist-util-visit.js'
+    - 'unist-util-visit.min.js'
   on:
     tags: true
