@@ -53,8 +53,8 @@ type Test<T extends Node> = TestType<T> | TestObject<T> | TestFunction<T>
  * @typeParam T tree node
  * @typeParam V node type to visit
  */
-declare function visit<T extends Node, V extends Node>(
-  tree: T,
+declare function visit<V extends Node>(
+  tree: Node,
   test: Test<V>,
   visitor: Visitor<V>,
   reverse?: boolean
@@ -70,8 +70,8 @@ declare function visit<T extends Node, V extends Node>(
  * @typeParam T tree node
  * @typeParam V node type to visit
  */
-declare function visit<T extends Node>(
-  tree: T,
+declare function visit(
+  tree: Node,
   test: Array<Test<any>>,
   visitor: Visitor<Node>,
   reverse?: boolean
@@ -85,8 +85,8 @@ declare function visit<T extends Node>(
  * @param reverse visit the tree in reverse, defaults to false
  * @typeParam T tree node
  */
-declare function visit<T extends Node>(
-  tree: T,
+declare function visit(
+  tree: Node,
   visitor: Visitor<Node>,
   reverse?: boolean
 ): void
