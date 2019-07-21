@@ -91,6 +91,9 @@ visit(sampleTree, elementTest, (node: Element) => {})
 // $ExpectError
 visit(sampleTree, elementTest, (node: Heading) => {})
 
+/*=== visit with array of tests ===*/
+visit(sampleTree, ['ParagraphNode', {type: 'element'}, headingTest], node => {})
+
 /*=== usage as unified plugin ===*/
 unified().use(() => sampleTree => {
   // duplicates the above type tests but passes in the unified transformer input
@@ -156,6 +159,13 @@ unified().use(() => sampleTree => {
   visit(sampleTree, elementTest, (node: Element) => {})
   // $ExpectError
   visit(sampleTree, elementTest, (node: Heading) => {})
+
+  /*=== visit with array of tests ===*/
+  visit(
+    sampleTree,
+    ['ParagraphNode', {type: 'element'}, headingTest],
+    node => {}
+  )
 
   return sampleTree
 })
