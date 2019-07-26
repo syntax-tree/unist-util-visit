@@ -30,8 +30,12 @@ interface Element extends Parent {
   children: Node[]
 }
 
-const headingTest = (node: Node): node is Heading => node.type === 'heading'
-const elementTest = (node: Node): node is Element => node.type === 'element'
+const isNode = (node: unknown): node is Node =>
+  typeof node === 'object' && !!node && 'type' in node
+const headingTest = (node: unknown): node is Heading =>
+  isNode(node) && node.type === 'heading'
+const elementTest = (node: unknown): node is Element =>
+  isNode(node) && node.type === 'element'
 
 /*=== missing params ===*/
 // $ExpectError
