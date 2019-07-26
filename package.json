@@ -30,7 +30,8 @@
   ],
   "types": "types/index.d.ts",
   "dependencies": {
-    "unist-util-is": "github:syntax-tree/unist-util-is#a23423",
+    "@types/unist": "^2.0.0",
+    "unist-util-is": "^4.0.0",
     "unist-util-visit-parents": "^2.0.0"
   },
   "devDependencies": {
