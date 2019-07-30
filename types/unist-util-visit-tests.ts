@@ -98,6 +98,34 @@ visit(sampleTree, elementTest, (node: Heading) => {})
 /*=== visit with array of tests ===*/
 visit(sampleTree, ['ParagraphNode', {type: 'element'}, headingTest], node => {})
 
+/*=== visit returns action ===*/
+visit(sampleTree, 'heading', node => visit.CONTINUE)
+visit(sampleTree, 'heading', node => visit.EXIT)
+visit(sampleTree, 'heading', node => visit.SKIP)
+visit(sampleTree, 'heading', node => true)
+visit(sampleTree, 'heading', node => false)
+visit(sampleTree, 'heading', node => 'skip')
+// $ExpectError
+visit(sampleTree, 'heading', node => 'random')
+
+/*=== visit returns index ===*/
+visit(sampleTree, 'heading', node => 0)
+visit(sampleTree, 'heading', node => 1)
+
+/*=== visit returns tuple ===*/
+visit(sampleTree, 'heading', node => [visit.CONTINUE, 1])
+visit(sampleTree, 'heading', node => [visit.EXIT, 1])
+visit(sampleTree, 'heading', node => [visit.SKIP, 1])
+visit(sampleTree, 'heading', node => [true, 1])
+visit(sampleTree, 'heading', node => [false, 1])
+visit(sampleTree, 'heading', node => ['skip', 1])
+// $ExpectError
+visit(sampleTree, 'heading', node => ['skip'])
+// $ExpectError
+visit(sampleTree, 'heading', node => [1])
+// $ExpectError
+visit(sampleTree, 'heading', node => ['random', 1])
+
 /*=== usage as unified plugin ===*/
 unified().use(() => sampleTree => {
   // duplicates the above type tests but passes in the unified transformer input
@@ -170,6 +198,34 @@ unified().use(() => sampleTree => {
     ['ParagraphNode', {type: 'element'}, headingTest],
     node => {}
   )
+
+  /*=== visit returns action ===*/
+  visit(sampleTree, 'heading', node => visit.CONTINUE)
+  visit(sampleTree, 'heading', node => visit.EXIT)
+  visit(sampleTree, 'heading', node => visit.SKIP)
+  visit(sampleTree, 'heading', node => true)
+  visit(sampleTree, 'heading', node => false)
+  visit(sampleTree, 'heading', node => 'skip')
+  // $ExpectError
+  visit(sampleTree, 'heading', node => 'random')
+
+  /*=== visit returns index ===*/
+  visit(sampleTree, 'heading', node => 0)
+  visit(sampleTree, 'heading', node => 1)
+
+  /*=== visit returns tuple ===*/
+  visit(sampleTree, 'heading', node => [visit.CONTINUE, 1])
+  visit(sampleTree, 'heading', node => [visit.EXIT, 1])
+  visit(sampleTree, 'heading', node => [visit.SKIP, 1])
+  visit(sampleTree, 'heading', node => [true, 1])
+  visit(sampleTree, 'heading', node => [false, 1])
+  visit(sampleTree, 'heading', node => ['skip', 1])
+  // $ExpectError
+  visit(sampleTree, 'heading', node => ['skip'])
+  // $ExpectError
+  visit(sampleTree, 'heading', node => [1])
+  // $ExpectError
+  visit(sampleTree, 'heading', node => ['random', 1])
 
   return sampleTree
 })
