@@ -156,7 +156,7 @@ test('unist-util-visit', function(t) {
     st.end()
 
     function visitor(node) {
-      var ok = expected.indexOf(node.type) !== -1 || node.value === '.'
+      var ok = expected.includes(node.type) || node.value === '.'
       assert.ok(ok, 'should be a requested type: ' + node.type)
       n++
     }
