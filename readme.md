@@ -14,13 +14,13 @@
 
 [npm][]:
 
-```bash
+```sh
 npm install unist-util-visit
 ```
 
-## Usage
+## Use
 
-```javascript
+```js
 var u = require('unist-builder')
 var visit = require('unist-util-visit')
 
@@ -62,13 +62,16 @@ Otherwise the same as [`unist-util-visit-parents`][vp].
 
 *   [`unist-util-visit-parents`][vp]
     — Like `visit`, but with a stack of parents
-*   [`unist-util-filter`](https://github.com/eush77/unist-util-filter)
+*   [`unist-util-filter`](https://github.com/syntax-tree/unist-util-filter)
     — Create a new tree with all nodes that pass a test
 *   [`unist-util-map`](https://github.com/syntax-tree/unist-util-map)
     — Create a new tree with all nodes mapped by a given function
-*   [`unist-util-remove`](https://github.com/eush77/unist-util-remove)
+*   [`unist-util-flatmap`](https://gitlab.com/staltz/unist-util-flatmap)
+    — Create a new tree by mapping (to an array) with the provided function and
+    then flattening
+*   [`unist-util-remove`](https://github.com/syntax-tree/unist-util-remove)
     — Remove nodes from a tree that pass a test
-*   [`unist-util-select`](https://github.com/eush77/unist-util-select)
+*   [`unist-util-select`](https://github.com/syntax-tree/unist-util-select)
     — Select nodes with CSS-like selectors
 
 ## Contribute
@@ -77,8 +80,8 @@ See [`contributing.md` in `syntax-tree/.github`][contributing] for ways to get
 started.
 See [`support.md`][support] for ways to get help.
 
-This project has a [Code of Conduct][coc].
-By interacting with this repository, organisation, or community you agree to
+This project has a [code of conduct][coc].
+By interacting with this repository, organization, or community you agree to
 abide by its terms.
 
 ## License
@@ -109,7 +112,7 @@ abide by its terms.
 
 [collective]: https://opencollective.com/unified
 
-[chat-badge]: https://img.shields.io/badge/join%20the%20community-on%20spectrum-7b16ff.svg
+[chat-badge]: https://img.shields.io/badge/chat-spectrum-7b16ff.svg
 
 [chat]: https://spectrum.chat/unified/syntax-tree
 
