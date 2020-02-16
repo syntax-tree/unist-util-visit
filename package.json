@@ -50,8 +50,8 @@
   },
   "devDependencies": {
     "browserify": "^16.0.0",
-    "dtslint": "^2.0.0",
-    "nyc": "^14.0.0",
+    "dtslint": "^3.0.0",
+    "nyc": "^15.0.0",
     "prettier": "^1.0.0",
     "remark": "^11.0.0",
     "remark-cli": "^7.0.0",
@@ -60,7 +60,7 @@
     "tinyify": "^2.0.0",
     "typescript": "^3.0.0",
     "unified": "^8.0.0",
-    "xo": "^0.25.0"
+    "xo": "^0.26.0"
   },
   "scripts": {
     "format": "remark . -qfo && prettier --write \"**/*.{js,ts}\" && xo --fix",
