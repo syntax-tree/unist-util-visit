@@ -1,6 +1,6 @@
 {
   "name": "unist-util-visit",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "unist utility to visit nodes",
   "license": "MIT",
   "keywords": [
