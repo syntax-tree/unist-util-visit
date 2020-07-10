@@ -38,7 +38,7 @@ declare namespace visit {
   type Visitor<V extends Node> = (
     node: V,
     index: number,
-    parent: Node
+    parent: Parent | undefined
   ) => void | Action | Index | ActionTuple
 }
 
