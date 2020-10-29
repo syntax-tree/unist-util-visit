@@ -4,13 +4,9 @@ module.exports = visit
 
 var visitParents = require('unist-util-visit-parents')
 
-var CONTINUE = visitParents.CONTINUE
-var SKIP = visitParents.SKIP
-var EXIT = visitParents.EXIT
-
-visit.CONTINUE = CONTINUE
-visit.SKIP = SKIP
-visit.EXIT = EXIT
+visit.CONTINUE = visitParents.CONTINUE
+visit.SKIP = visitParents.SKIP
+visit.EXIT = visitParents.EXIT
 
 function visit(tree, test, visitor, reverse) {
   if (typeof test === 'function' && typeof visitor !== 'function') {
