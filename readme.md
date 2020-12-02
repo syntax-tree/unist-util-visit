@@ -89,9 +89,9 @@ abide by its terms.
 
 <!-- Definition -->
 
-[build-badge]: https://img.shields.io/travis/syntax-tree/unist-util-visit.svg
+[build-badge]: https://github.com/syntax-tree/unist-util-visit/workflows/main/badge.svg
 
-[build]: https://travis-ci.org/syntax-tree/unist-util-visit
+[build]: https://github.com/syntax-tree/unist-util-visit/actions
 
 [coverage-badge]: https://img.shields.io/codecov/c/github/syntax-tree/unist-util-visit.svg
 
