@@ -19,7 +19,6 @@ function visit(tree, test, visitor, reverse) {
 
   function overload(node, parents) {
     var parent = parents[parents.length - 1]
-    var index = parent ? parent.children.indexOf(node) : null
-    return visitor(node, index, parent)
+    return visitor(node, parent ? parent.children.indexOf(node) : null, parent)
   }
 }
