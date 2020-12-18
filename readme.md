@@ -58,7 +58,7 @@ node’s [`index`][index] and its [`parent`][parent].
 
 Otherwise the same as [`unist-util-visit-parents`][vp].
 
-See [next? = visitor(node, ancestors)][vp-visitor] in the
+See [`next? = visitor(node, ancestors)`][vp-visitor] in the
 [`unist-util-visit-parents`][vp] README for more documentation on traversing
 a tree with a `visitor`, including how to skip traversing descendants of a
 node, how to exit early, and how to traverse a tree while modifying it.
