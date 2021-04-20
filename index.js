@@ -1,14 +1,8 @@
-'use strict'
+import {visitParents, CONTINUE, SKIP, EXIT} from 'unist-util-visit-parents'
 
-module.exports = visit
+export {CONTINUE, SKIP, EXIT}
 
-var visitParents = require('unist-util-visit-parents')
-
-visit.CONTINUE = visitParents.CONTINUE
-visit.SKIP = visitParents.SKIP
-visit.EXIT = visitParents.EXIT
-
-function visit(tree, test, visitor, reverse) {
+export function visit(tree, test, visitor, reverse) {
   if (typeof test === 'function' && typeof visitor !== 'function') {
     reverse = visitor
     visitor = test

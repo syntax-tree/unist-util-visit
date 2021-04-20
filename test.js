@@ -1,16 +1,14 @@
-'use strict'
-
-var assert = require('assert')
-var test = require('tape')
-var remark = require('remark')
-var gfm = require('remark-gfm')
-var visit = require('.')
+import assert from 'assert'
+import test from 'tape'
+import remark from 'remark'
+import gfm from 'remark-gfm'
+import {visit, CONTINUE, EXIT, SKIP} from './index.js'
 
 var tree = remark().parse('Some _emphasis_, **importance**, and `code`.')
 
-var STOP = 5
-var SKIP = 7
-var SKIP_REVERSE = 6
+var stopIndex = 5
+var skipIndex = 7
+var skipReverseIndex = 6
 
 var texts = 6
 var codes = 1
@@ -146,7 +144,7 @@ test('unist-util-visit', function (t) {
   })
 
   t.test('should accept an array of `is`-compatible tests', function (st) {
-    var expected = ['root', 'paragraph', 'emphasis', 'strong']
+    var expected = new Set(['root', 'paragraph', 'emphasis', 'strong'])
     var tests = [test, 'paragraph', {value: '.'}, ['emphasis', 'strong']]
     var n = 0
 
@@ -157,7 +155,7 @@ test('unist-util-visit', function (t) {
     st.end()
 
     function visitor(node) {
-      var ok = expected.includes(node.type) || node.value === '.'
+      var ok = expected.has(node.type) || node.value === '.'
       assert.ok(ok, 'should be a requested type: ' + node.type)
       n++
     }
@@ -172,13 +170,13 @@ test('unist-util-visit', function (t) {
 
     visit(tree, visitor)
 
-    st.equal(n, STOP, 'should visit nodes until `visit.EXIT` is given')
+    st.equal(n, stopIndex, 'should visit nodes until `EXIT` is given')
 
     st.end()
 
     function visitor(node) {
       assert.strictEqual(node.type, types[n++], 'should be the expected type')
-      return n === STOP ? visit.EXIT : visit.CONTINUE
+      return n === stopIndex ? EXIT : CONTINUE
     }
   })
 
@@ -187,7 +185,7 @@ test('unist-util-visit', function (t) {
 
     visit(tree, visitor, true)
 
-    st.equal(n, STOP, 'should visit nodes until `visit.EXIT` is given')
+    st.equal(n, stopIndex, 'should visit nodes until `EXIT` is given')
 
     st.end()
 
@@ -197,7 +195,7 @@ test('unist-util-visit', function (t) {
         reverseTypes[n++],
         'should be the expected type'
       )
-      return n === STOP ? visit.EXIT : visit.CONTINUE
+      return n === stopIndex ? EXIT : CONTINUE
     }
   })
 
@@ -210,7 +208,7 @@ test('unist-util-visit', function (t) {
     st.equal(
       count,
       types.length - 1,
-      'should visit nodes except when `visit.SKIP` is given'
+      'should visit nodes except when `SKIP` is given'
     )
 
     st.end()
@@ -219,9 +217,9 @@ test('unist-util-visit', function (t) {
       assert.strictEqual(node.type, types[n++], 'should be the expected type')
       count++
 
-      if (n === SKIP) {
+      if (n === skipIndex) {
         n++ // The one node inside it.
-        return visit.SKIP
+        return SKIP
       }
     }
   })
@@ -235,7 +233,7 @@ test('unist-util-visit', function (t) {
     st.equal(
       count,
       reverseTypes.length - 1,
-      'should visit nodes except when `visit.SKIP` is given'
+      'should visit nodes except when `SKIP` is given'
     )
 
     st.end()
@@ -248,9 +246,9 @@ test('unist-util-visit', function (t) {
       )
       count++
 
-      if (n === SKIP_REVERSE) {
+      if (n === skipReverseIndex) {
         n++ // The one node inside it.
-        return visit.SKIP
+        return SKIP
       }
     }
   })
