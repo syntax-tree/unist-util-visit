@@ -24,17 +24,17 @@ npm install unist-util-visit
 ## Use
 
 ```js
-var u = require('unist-builder')
-var visit = require('unist-util-visit')
+import u from 'unist-builder'
+import visit from 'unist-util-visit'
 
-var tree = u('tree', [
+const tree = u('tree', [
   u('leaf', '1'),
   u('node', [u('leaf', '2')]),
   u('void'),
   u('leaf', '3')
 ])
 
-visit(tree, 'leaf', function(node) {
+visit(tree, 'leaf', (node) => {
   console.log(node)
 })
 ```
