@@ -1,3 +1,8 @@
+/**
+ * @typedef {import('unist').Node} Node
+ * @typedef {import('unist').Parent} Parent
+ */
+
 import assert from 'assert'
 import test from 'tape'
 import remark from 'remark'
@@ -44,6 +49,7 @@ var reverseTypes = [
 test('unist-util-visit', function (t) {
   t.throws(
     function () {
+      // @ts-ignore runtime.
       visit()
     },
     /TypeError: visitor is not a function/,
@@ -52,6 +58,7 @@ test('unist-util-visit', function (t) {
 
   t.throws(
     function () {
+      // @ts-ignore runtime.
       visit(tree)
     },
     /TypeError: visitor is not a function/,
@@ -67,6 +74,9 @@ test('unist-util-visit', function (t) {
 
     st.end()
 
+    /**
+     * @param {Node} node
+     */
     function visitor(node) {
       assert.strictEqual(node.type, types[n], 'should be the expected type')
       n++
@@ -82,6 +92,9 @@ test('unist-util-visit', function (t) {
 
     st.end()
 
+    /**
+     * @param {Node} node
+     */
     function visitor(node) {
       assert.strictEqual(
         node.type,
@@ -101,6 +114,9 @@ test('unist-util-visit', function (t) {
 
     st.end()
 
+    /**
+     * @param {Node} node
+     */
     function visitor(node) {
       assert.strictEqual(node.type, 'text', 'should be the expected type')
       n++
@@ -117,6 +133,9 @@ test('unist-util-visit', function (t) {
 
     st.end()
 
+    /**
+     * @param {Node} node
+     */
     function visitor(node) {
       n++
       assert.notStrictEqual(types.indexOf(node.type), -1, 'should match')
@@ -132,20 +151,29 @@ test('unist-util-visit', function (t) {
 
     st.end()
 
+    /**
+     * @param {Node} node
+     * @param {number|null} index
+     * @param {Parent|null} parent
+     */
     function visitor(node, index, parent) {
       var info = '(' + (parent && parent.type) + ':' + index + ')'
       assert.ok(test(node, index), 'should be a requested node ' + info)
       n++
     }
 
-    function test(node, index) {
+    /**
+     * @param {Node} _
+     * @param {number|null} index
+     */
+    function test(_, index) {
       return index > 3
     }
   })
 
   t.test('should accept an array of `is`-compatible tests', function (st) {
     var expected = new Set(['root', 'paragraph', 'emphasis', 'strong'])
-    var tests = [test, 'paragraph', {value: '.'}, ['emphasis', 'strong']]
+    var tests = [test, 'paragraph', {value: '.'}, 'emphasis', 'strong']
     var n = 0
 
     visit(tree, tests, visitor)
@@ -154,12 +182,18 @@ test('unist-util-visit', function (t) {
 
     st.end()
 
+    /**
+     * @param {Node} node
+     */
     function visitor(node) {
       var ok = expected.has(node.type) || node.value === '.'
       assert.ok(ok, 'should be a requested type: ' + node.type)
       n++
     }
 
+    /**
+     * @param {Node} node
+     */
     function test(node) {
       return node.type === 'root'
     }
@@ -174,6 +208,9 @@ test('unist-util-visit', function (t) {
 
     st.end()
 
+    /**
+     * @param {Node} node
+     */
     function visitor(node) {
       assert.strictEqual(node.type, types[n++], 'should be the expected type')
       return n === stopIndex ? EXIT : CONTINUE
@@ -189,6 +226,9 @@ test('unist-util-visit', function (t) {
 
     st.end()
 
+    /**
+     * @param {Node} node
+     */
     function visitor(node) {
       assert.strictEqual(
         node.type,
@@ -213,6 +253,9 @@ test('unist-util-visit', function (t) {
 
     st.end()
 
+    /**
+     * @param {Node} node
+     */
     function visitor(node) {
       assert.strictEqual(node.type, types[n++], 'should be the expected type')
       count++
@@ -238,6 +281,9 @@ test('unist-util-visit', function (t) {
 
     st.end()
 
+    /**
+     * @param {Node} node
+     */
     function visitor(node) {
       assert.strictEqual(
         node.type,
@@ -284,6 +330,9 @@ test('unist-util-visit', function (t) {
 
       st.end()
 
+      /**
+       * @param {Node} node
+       */
       function visitor(node) {
         assert.strictEqual(
           node.type,
@@ -321,7 +370,12 @@ test('unist-util-visit', function (t) {
 
       st.end()
 
-      function visitor(node, index, parent) {
+      /**
+       * @param {Node} node
+       * @param {number|null} _
+       * @param {Parent|null} parent
+       */
+      function visitor(node, _, parent) {
         assert.strictEqual(
           node.type,
           expected[n++],
@@ -360,6 +414,10 @@ test('unist-util-visit', function (t) {
 
       st.end()
 
+      /**
+       * @param {Node} node
+       * @param {number|null} index
+       */
       function visitor(node, index) {
         assert.strictEqual(
           node.type,
@@ -387,7 +445,12 @@ test('unist-util-visit', function (t) {
 
     st.end()
 
-    function visitor(node, index, parent) {
+    /**
+     * @param {Node} _1
+     * @param {number|null} _2
+     * @param {Parent|null} parent
+     */
+    function visitor(_1, _2, parent) {
       n++
 
       if (n === 2) {
