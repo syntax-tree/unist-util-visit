@@ -1,12 +1,8 @@
 /**
  * @typedef {import('unist').Node} Node
  * @typedef {import('unist').Parent} Parent
- * @typedef {import('unist-util-is').Type} Type
- * @typedef {import('unist-util-is').Props} Props
- * @typedef {import('unist-util-is').TestFunctionAnything} TestFunctionAnything
- * @typedef {import('unist-util-visit-parents').Action} Action
- * @typedef {import('unist-util-visit-parents').Index} Index
- * @typedef {import('unist-util-visit-parents').ActionTuple} ActionTuple
+ * @typedef {import('unist-util-is').Test} Test
+ * @typedef {import('unist-util-visit-parents').VisitorResult} VisitorResult
  */
 
 /**
@@ -25,7 +21,7 @@
  * @param {V} node Found node
  * @param {number|null} index Position of `node` in `parent`
  * @param {Parent|null} parent Parent of `node`
- * @returns {null|undefined|Action|Index|ActionTuple|void}
+ * @returns {VisitorResult}
  */
 
 import {visitParents, CONTINUE, SKIP, EXIT} from 'unist-util-visit-parents'
@@ -36,7 +32,7 @@ export const visit =
   /**
    * @type {(
    *   (<T extends Node>(tree: Node, test: T['type']|Partial<T>|import('unist-util-is').TestFunctionPredicate<T>|Array.<T['type']|Partial<T>|import('unist-util-is').TestFunctionPredicate<T>>, visitor: Visitor<T>, reverse?: boolean) => void) &
-   *   ((tree: Node, test: null|undefined|Type|Props|TestFunctionAnything|Array<Type|Props|TestFunctionAnything>, visitor: Visitor<Node>, reverse?: boolean) => void) &
+   *   ((tree: Node, test: Test, visitor: Visitor<Node>, reverse?: boolean) => void) &
    *   ((tree: Node, visitor: Visitor<Node>, reverse?: boolean) => void)
    * )}
    */
@@ -45,7 +41,7 @@ export const visit =
      * Visit children of tree which pass a test
      *
      * @param {Node} tree Abstract syntax tree to walk
-     * @param {null|undefined|Type|Props|TestFunctionAnything|Array<Type|Props|TestFunctionAnything>} test test Test node
+     * @param {Test} test test Test node
      * @param {Visitor<Node>} visitor Function to run for each node
      * @param {boolean} [reverse] Fisit the tree in reverse, defaults to false
      */
