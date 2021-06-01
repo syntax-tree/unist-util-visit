@@ -47,6 +47,13 @@ Yields:
 { type: 'leaf', value: '3' }
 ```
 
+## Upgrading from v2 -> v3
+
+```js
+import { visit } from "unist-util-visit" // v3
+// import visit from "unist-util-visit" // v2
+```
+
 ## API
 
 This package exports the following identifiers: `visit`, `CONTINUE`, `SKIP`, and
