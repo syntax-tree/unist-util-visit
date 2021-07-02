@@ -47,6 +47,12 @@ Yields:
 { type: 'leaf', value: '3' }
 ```
 
+**For beginners** Don't forget to install all dependencies for this example: 
+
+```sh
+npm install unist-builder unist-util-visit
+```
+
 ## API
 
 This package exports the following identifiers: `visit`, `CONTINUE`, `SKIP`, and
