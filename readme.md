@@ -47,7 +47,7 @@ Yields:
 { type: 'leaf', value: '3' }
 ```
 
-**For beginners** Don't forget to install all dependencies for this example: 
+Note: this example also uses `unist-builder`, to run the example ensure both `unist-builder` and `unist-util-visit` are installed:
 
 ```sh
 npm install unist-builder unist-util-visit
