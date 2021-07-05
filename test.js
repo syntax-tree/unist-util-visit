@@ -436,8 +436,8 @@ test('unist-util-visit', function (t) {
   t.test('should visit added nodes', function (st) {
     var tree = remark().parse('Some _emphasis_, **importance**, and `code`.')
 
-    // Unified doesn't (yet) let us specify parse result type, so all
-    // we know is that it's a node, but we know it is a parent, so we
+    // Unified doesn't know parse result type,
+    // all we know is that it's a node, but we know it is a parent, so we
     // assert that here
     var other = /** @type{Parent} */ (
       remark().use(gfm).parse('Another ~~sentence~~.')
