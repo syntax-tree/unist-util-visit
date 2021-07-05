@@ -1,4 +1,5 @@
 /**
+ * @typedef {import('unist').Literal} Literal
  * @typedef {import('unist').Node} Node
  * @typedef {import('unist').Parent} Parent
  */
