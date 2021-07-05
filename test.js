@@ -183,7 +183,7 @@ test('unist-util-visit', function (t) {
     st.end()
 
     /**
-     * @param {Node} node
+     * @param {Node & { value: string}} node
      */
     function visitor(node) {
       var ok = expected.has(node.type) || node.value === '.'
@@ -435,7 +435,14 @@ test('unist-util-visit', function (t) {
 
   t.test('should visit added nodes', function (st) {
     var tree = remark().parse('Some _emphasis_, **importance**, and `code`.')
-    var other = remark().use(gfm).parse('Another ~~sentence~~.').children[0]
+
+    // Unified doesn't (yet) let us specify parse result type, so all
+    // we know is that it's a node, but we know it is a parent, so we
+    // assert that here
+    var other = /** @type{Parent} */ (
+      remark().use(gfm).parse('Another ~~sentence~~.')
+    ).children[0]
+
     var l = types.length + 5 // (p, text, delete, text, text)
     var n = 0
 

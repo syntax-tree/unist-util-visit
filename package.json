@@ -47,7 +47,7 @@
     "index.js"
   ],
   "dependencies": {
-    "@types/unist": "^2.0.0",
+    "@types/unist": "^2.0.5",
     "unist-util-is": "^5.0.0",
     "unist-util-visit-parents": "^4.0.0"
   },
