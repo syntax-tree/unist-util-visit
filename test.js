@@ -183,7 +183,7 @@ test('unist-util-visit', function (t) {
     st.end()
 
     /**
-     * @param {Node & { value: string}} node
+     * @param {Literal} node
      */
     function visitor(node) {
       var ok = expected.has(node.type) || node.value === '.'
