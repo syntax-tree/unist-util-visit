@@ -66,7 +66,7 @@ but `visitor` has a different signature.
 
 #### `next? = visitor(node, index, parent)`
 
-Instead of being passed an array of ancestors, `visitor` is invoked with the
+Instead of being passed an array of ancestors, `visitor` is called with the
 `node`’s [`index`][index] and its [`parent`][parent].  The optional return value
 `next` is documented in [`unist-util-visit-parents`][vp]’s readme.
 

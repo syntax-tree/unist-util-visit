@@ -6,7 +6,7 @@
  */
 
 /**
- * Invoked when a node (matching test, if given) is found.
+ * Called when a node (matching test, if given) is found.
  * Visitors are free to transform node.
  * They can also transform the parent of node (the last of ancestors).
  * Replacing node itself, if `SKIP` is not returned, still causes its descendants to be visited.
@@ -59,7 +59,7 @@ export const visit =
        * @param {Array.<Parent>} parents
        */
       function overload(node, parents) {
-        var parent = parents[parents.length - 1]
+        const parent = parents[parents.length - 1]
         return visitor(
           node,
           parent ? parent.children.indexOf(node) : null,

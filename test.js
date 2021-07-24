@@ -10,16 +10,16 @@ import remark from 'remark'
 import gfm from 'remark-gfm'
 import {visit, CONTINUE, EXIT, SKIP} from './index.js'
 
-var tree = remark().parse('Some _emphasis_, **importance**, and `code`.')
+const tree = remark().parse('Some _emphasis_, **importance**, and `code`.')
 
-var stopIndex = 5
-var skipIndex = 7
-var skipReverseIndex = 6
+const stopIndex = 5
+const skipIndex = 7
+const skipReverseIndex = 6
 
-var texts = 6
-var codes = 1
+const texts = 6
+const codes = 1
 
-var types = [
+const types = [
   'root',
   'paragraph',
   'text',
@@ -33,7 +33,7 @@ var types = [
   'text'
 ]
 
-var reverseTypes = [
+const reverseTypes = [
   'root',
   'paragraph',
   'text',
@@ -47,9 +47,9 @@ var reverseTypes = [
   'text'
 ]
 
-test('unist-util-visit', function (t) {
+test('unist-util-visit', (t) => {
   t.throws(
-    function () {
+    () => {
       // @ts-ignore runtime.
       visit()
     },
@@ -58,7 +58,7 @@ test('unist-util-visit', function (t) {
   )
 
   t.throws(
-    function () {
+    () => {
       // @ts-ignore runtime.
       visit(tree)
     },
@@ -66,14 +66,14 @@ test('unist-util-visit', function (t) {
     'should fail without visitor'
   )
 
-  t.test('should iterate over all nodes', function (st) {
-    var n = 0
+  t.test('should iterate over all nodes', (t) => {
+    let n = 0
 
     visit(tree, visitor)
 
-    st.equal(n, types.length, 'should visit all nodes')
+    t.equal(n, types.length, 'should visit all nodes')
 
-    st.end()
+    t.end()
 
     /**
      * @param {Node} node
@@ -84,14 +84,14 @@ test('unist-util-visit', function (t) {
     }
   })
 
-  t.test('should iterate over all nodes, backwards', function (st) {
-    var n = 0
+  t.test('should iterate over all nodes, backwards', (t) => {
+    let n = 0
 
     visit(tree, visitor, true)
 
-    st.equal(n, reverseTypes.length, 'should visit all nodes in reverse')
+    t.equal(n, reverseTypes.length, 'should visit all nodes in reverse')
 
-    st.end()
+    t.end()
 
     /**
      * @param {Node} node
@@ -106,14 +106,14 @@ test('unist-util-visit', function (t) {
     }
   })
 
-  t.test('should only visit a given `type`', function (st) {
-    var n = 0
+  t.test('should only visit a given `type`', (t) => {
+    let n = 0
 
     visit(tree, 'text', visitor)
 
-    st.equal(n, texts, 'should visit all matching nodes')
+    t.equal(n, texts, 'should visit all matching nodes')
 
-    st.end()
+    t.end()
 
     /**
      * @param {Node} node
@@ -124,15 +124,15 @@ test('unist-util-visit', function (t) {
     }
   })
 
-  t.test('should only visit given `type`s', function (st) {
-    var types = ['text', 'inlineCode']
-    var n = 0
+  t.test('should only visit given `type`s', (t) => {
+    const types = ['text', 'inlineCode']
+    let n = 0
 
     visit(tree, types, visitor)
 
-    st.equal(n, texts + codes, 'should visit all matching nodes')
+    t.equal(n, texts + codes, 'should visit all matching nodes')
 
-    st.end()
+    t.end()
 
     /**
      * @param {Node} node
@@ -143,14 +143,14 @@ test('unist-util-visit', function (t) {
     }
   })
 
-  t.test('should accept any `is`-compatible test function', function (st) {
-    var n = 0
+  t.test('should accept any `is`-compatible test function', (t) => {
+    let n = 0
 
     visit(tree, test, visitor)
 
-    st.equal(n, 3, 'should visit all passing nodes')
+    t.equal(n, 3, 'should visit all passing nodes')
 
-    st.end()
+    t.end()
 
     /**
      * @param {Node} node
@@ -158,7 +158,7 @@ test('unist-util-visit', function (t) {
      * @param {Parent|null} parent
      */
     function visitor(node, index, parent) {
-      var info = '(' + (parent && parent.type) + ':' + index + ')'
+      const info = '(' + (parent && parent.type) + ':' + index + ')'
       assert.ok(test(node, index), 'should be a requested node ' + info)
       n++
     }
@@ -172,22 +172,22 @@ test('unist-util-visit', function (t) {
     }
   })
 
-  t.test('should accept an array of `is`-compatible tests', function (st) {
-    var expected = new Set(['root', 'paragraph', 'emphasis', 'strong'])
-    var tests = [test, 'paragraph', {value: '.'}, 'emphasis', 'strong']
-    var n = 0
+  t.test('should accept an array of `is`-compatible tests', (t) => {
+    const expected = new Set(['root', 'paragraph', 'emphasis', 'strong'])
+    const tests = [test, 'paragraph', {value: '.'}, 'emphasis', 'strong']
+    let n = 0
 
     visit(tree, tests, visitor)
 
-    st.equal(n, 5, 'should visit all passing nodes')
+    t.equal(n, 5, 'should visit all passing nodes')
 
-    st.end()
+    t.end()
 
     /**
      * @param {Literal} node
      */
     function visitor(node) {
-      var ok = expected.has(node.type) || node.value === '.'
+      const ok = expected.has(node.type) || node.value === '.'
       assert.ok(ok, 'should be a requested type: ' + node.type)
       n++
     }
@@ -200,14 +200,14 @@ test('unist-util-visit', function (t) {
     }
   })
 
-  t.test('should stop if `visitor` stops', function (st) {
-    var n = 0
+  t.test('should stop if `visitor` stops', (t) => {
+    let n = 0
 
     visit(tree, visitor)
 
-    st.equal(n, stopIndex, 'should visit nodes until `EXIT` is given')
+    t.equal(n, stopIndex, 'should visit nodes until `EXIT` is given')
 
-    st.end()
+    t.end()
 
     /**
      * @param {Node} node
@@ -218,14 +218,14 @@ test('unist-util-visit', function (t) {
     }
   })
 
-  t.test('should stop if `visitor` stops, backwards', function (st) {
-    var n = 0
+  t.test('should stop if `visitor` stops, backwards', (t) => {
+    let n = 0
 
     visit(tree, visitor, true)
 
-    st.equal(n, stopIndex, 'should visit nodes until `EXIT` is given')
+    t.equal(n, stopIndex, 'should visit nodes until `EXIT` is given')
 
-    st.end()
+    t.end()
 
     /**
      * @param {Node} node
@@ -240,19 +240,19 @@ test('unist-util-visit', function (t) {
     }
   })
 
-  t.test('should skip if `visitor` skips', function (st) {
-    var n = 0
-    var count = 0
+  t.test('should skip if `visitor` skips', (t) => {
+    let n = 0
+    let count = 0
 
     visit(tree, visitor)
 
-    st.equal(
+    t.equal(
       count,
       types.length - 1,
       'should visit nodes except when `SKIP` is given'
     )
 
-    st.end()
+    t.end()
 
     /**
      * @param {Node} node
@@ -268,19 +268,19 @@ test('unist-util-visit', function (t) {
     }
   })
 
-  t.test('should skip if `visitor` skips, backwards', function (st) {
-    var n = 0
-    var count = 0
+  t.test('should skip if `visitor` skips, backwards', (t) => {
+    let n = 0
+    let count = 0
 
     visit(tree, visitor, true)
 
-    st.equal(
+    t.equal(
       count,
       reverseTypes.length - 1,
       'should visit nodes except when `SKIP` is given'
     )
 
-    st.end()
+    t.end()
 
     /**
      * @param {Node} node
@@ -302,10 +302,10 @@ test('unist-util-visit', function (t) {
 
   t.test(
     'should support a given `index` to iterate over next (`0` to reiterate)',
-    function (st) {
-      var n = 0
-      var again = false
-      var expected = [
+    (t) => {
+      let n = 0
+      let again = false
+      const expected = [
         'root',
         'paragraph',
         'text',
@@ -327,9 +327,9 @@ test('unist-util-visit', function (t) {
 
       visit(tree, visitor)
 
-      st.equal(n, expected.length, 'should visit nodes again')
+      t.equal(n, expected.length, 'should visit nodes again')
 
-      st.end()
+      t.end()
 
       /**
        * @param {Node} node
@@ -351,10 +351,10 @@ test('unist-util-visit', function (t) {
 
   t.test(
     'should support a given `index` to iterate over next (`children.length` to skip further children)',
-    function (st) {
-      var n = 0
-      var again = false
-      var expected = [
+    (t) => {
+      let n = 0
+      let again = false
+      const expected = [
         'root',
         'paragraph',
         'text',
@@ -367,9 +367,9 @@ test('unist-util-visit', function (t) {
 
       visit(tree, visitor)
 
-      st.equal(n, expected.length, 'should skip nodes')
+      t.equal(n, expected.length, 'should skip nodes')
 
-      st.end()
+      t.end()
 
       /**
        * @param {Node} node
@@ -391,67 +391,64 @@ test('unist-util-visit', function (t) {
     }
   )
 
-  t.test(
-    'should support any other given `index` to iterate over next',
-    function (st) {
-      var n = 0
-      var again = false
-      var expected = [
-        'root',
-        'paragraph',
-        'text',
-        'emphasis',
-        'text',
-        'text',
-        'strong',
-        'text',
-        'inlineCode', // Skip to here.
-        'text'
-      ]
+  t.test('should support any other given `index` to iterate over next', (t) => {
+    let n = 0
+    let again = false
+    const expected = [
+      'root',
+      'paragraph',
+      'text',
+      'emphasis',
+      'text',
+      'text',
+      'strong',
+      'text',
+      'inlineCode', // Skip to here.
+      'text'
+    ]
 
-      visit(tree, visitor)
+    visit(tree, visitor)
 
-      st.equal(n, expected.length, 'should skip nodes')
+    t.equal(n, expected.length, 'should skip nodes')
 
-      st.end()
+    t.end()
 
-      /**
-       * @param {Node} node
-       * @param {number|null} index
-       */
-      function visitor(node, index) {
-        assert.strictEqual(
-          node.type,
-          expected[n++],
-          'should be the expected type'
-        )
+    /**
+     * @param {Node} node
+     * @param {number|null} index
+     */
+    function visitor(node, index) {
+      assert.strictEqual(
+        node.type,
+        expected[n++],
+        'should be the expected type'
+      )
 
-        if (again === false && node.type === 'strong') {
-          again = true
-          return index + 2 // Skip to `inlineCode`.
-        }
+      if (again === false && node.type === 'strong') {
+        again = true
+        return index + 2 // Skip to `inlineCode`.
       }
     }
-  )
+  })
 
-  t.test('should visit added nodes', function (st) {
-    var tree = remark().parse('Some _emphasis_, **importance**, and `code`.')
+  t.test('should visit added nodes', (t) => {
+    const tree = remark().parse('Some _emphasis_, **importance**, and `code`.')
 
     // Unified doesn't know parse result type,
     // all we know is that it's a node, but we know it is a parent, so we
     // assert that here
-    var other = /** @type{Parent} */ (
+    const other = /** @type{Parent} */ (
       remark().use(gfm).parse('Another ~~sentence~~.')
     ).children[0]
 
-    var l = types.length + 5 // (p, text, delete, text, text)
-    var n = 0
+    const l = types.length + 5 // (p, text, delete, text, text)
+    let n = 0
 
     visit(tree, visitor)
 
-    st.equal(n, l, 'should walk over all nodes')
+    t.equal(n, l, 'should walk over all nodes')
 
-    st.end()
+    t.end()
 
     /**
      * @param {Node} _1
