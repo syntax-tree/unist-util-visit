@@ -50,7 +50,7 @@ const reverseTypes = [
 test('unist-util-visit', (t) => {
   t.throws(
     () => {
-      // @ts-ignore runtime.
+      // @ts-expect-error runtime.
       visit()
     },
     /TypeError: visitor is not a function/,
@@ -59,7 +59,7 @@ test('unist-util-visit', (t) => {
 
   t.throws(
     () => {
-      // @ts-ignore runtime.
+      // @ts-expect-error runtime.
       visit(tree)
     },
     /TypeError: visitor is not a function/,
@@ -146,58 +146,47 @@ test('unist-util-visit', (t) => {
   t.test('should accept any `is`-compatible test function', (t) => {
     let n = 0
 
-    visit(tree, test, visitor)
+    visit(tree, test, (node, index, parent) => {
+      const info = '(' + (parent && parent.type) + ':' + index + ')'
+      assert.ok(test(node, index), 'should be a requested node ' + info)
+      n++
+    })
 
     t.equal(n, 3, 'should visit all passing nodes')
 
     t.end()
 
     /**
-     * @param {Node} node
-     * @param {number|null} index
-     * @param {Parent|null} parent
-     */
-    function visitor(node, index, parent) {
-      const info = '(' + (parent && parent.type) + ':' + index + ')'
-      assert.ok(test(node, index), 'should be a requested node ' + info)
-      n++
-    }
-
-    /**
      * @param {Node} _
-     * @param {number|null} index
+     * @param {number|null|undefined} index
      */
     function test(_, index) {
-      return index > 3
+      return typeof index === 'number' && index > 3
     }
   })
 
   t.test('should accept an array of `is`-compatible tests', (t) => {
     const expected = new Set(['root', 'paragraph', 'emphasis', 'strong'])
-    const tests = [test, 'paragraph', {value: '.'}, 'emphasis', 'strong']
+    const tests = [
+      /** @param {Node} node */
+      (node) => node.type === 'root',
+      'paragraph',
+      {value: '.'},
+      'emphasis',
+      'strong'
+    ]
     let n = 0
 
-    visit(tree, tests, visitor)
+    visit(tree, tests, (node) => {
+      // @ts-expect-error: indexable.
+      const ok = expected.has(node.type) || node.value === '.'
+      assert.ok(ok, 'should be a requested type: ' + node.type)
+      n++
+    })
 
     t.equal(n, 5, 'should visit all passing nodes')
 
     t.end()
-
-    /**
-     * @param {Literal} node
-     */
-    function visitor(node) {
-      const ok = expected.has(node.type) || node.value === '.'
-      assert.ok(ok, 'should be a requested type: ' + node.type)
-      n++
-    }
-
-    /**
-     * @param {Node} node
-     */
-    function test(node) {
-      return node.type === 'root'
-    }
   })
 
   t.test('should stop if `visitor` stops', (t) => {
@@ -383,7 +372,7 @@ test('unist-util-visit', (t) => {
           'should be the expected type'
         )
 
-        if (again === false && node.type === 'strong') {
+        if (parent && again === false && node.type === 'strong') {
           again = true
           return parent.children.length // Skip siblings.
         }
@@ -424,7 +413,11 @@ test('unist-util-visit', (t) => {
         'should be the expected type'
       )
 
-      if (again === false && node.type === 'strong') {
+      if (
+        typeof index === 'number' &&
+        again === false &&
+        node.type === 'strong'
+      ) {
         again = true
         return index + 2 // Skip to `inlineCode`.
       }
@@ -458,7 +451,7 @@ test('unist-util-visit', (t) => {
     function visitor(_1, _2, parent) {
       n++
 
-      if (n === 2) {
+      if (parent && n === 2) {
         parent.children.push(other)
       }
     }
