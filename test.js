@@ -4,7 +4,7 @@
  * @typedef {import('unist').Parent} Parent
  */
 
-import assert from 'assert'
+import assert from 'node:assert'
 import test from 'tape'
 import remark from 'remark'
 import gfm from 'remark-gfm'
