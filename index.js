@@ -28,22 +28,27 @@ import {visitParents, CONTINUE, SKIP, EXIT} from 'unist-util-visit-parents'
 
 export {CONTINUE, SKIP, EXIT}
 
+/**
+ * Visit children of tree which pass a test
+ *
+ * @param tree Abstract syntax tree to walk
+ * @param test Test, optional
+ * @param visitor Function to run for each node
+ * @param reverse Fisit the tree in reverse, defaults to false
+ */
 export const visit =
   /**
    * @type {(
-   *   (<Needle extends Node>(tree: Node, test: Needle['type']|Partial<Needle>|import('unist-util-is').TestFunctionPredicate<Needle>|Array.<Needle['type']|Partial<Needle>|import('unist-util-is').TestFunctionPredicate<Needle>>, visitor: Visitor<Needle>, reverse?: boolean) => void) &
-   *   (<Tree extends Node>(tree: Tree, test: Test, visitor: Visitor<import('unist-util-visit-parents/complex-types').NodeInTree<Tree>>, reverse?: boolean) => void) &
-   *   (<Tree extends Node>(tree: Tree, visitor: Visitor<import('unist-util-visit-parents/complex-types').NodeInTree<Tree>>, reverse?: boolean) => void)
+   *   (<Tree extends Node, Check extends Test>(tree: Tree, test: Check, visitor: Visitor<import('unist-util-visit-parents/complex-types').Matches<import('unist-util-visit-parents/complex-types').InclusiveDescendant<Tree>, Check>>, reverse?: boolean) => void) &
+   *   (<Tree extends Node>(tree: Tree, visitor: Visitor<import('unist-util-visit-parents/complex-types').InclusiveDescendant<Tree>>, reverse?: boolean) => void)
    * )}
    */
   (
     /**
-     * Visit children of tree which pass a test
-     *
-     * @param {Node} tree Abstract syntax tree to walk
-     * @param {Test} test test Test node
-     * @param {Visitor<Node>} visitor Function to run for each node
-     * @param {boolean} [reverse] Fisit the tree in reverse, defaults to false
+     * @param {Node} tree
+     * @param {Test} test
+     * @param {Visitor<Node>} visitor
+     * @param {boolean} [reverse]
      */
     function (tree, test, visitor, reverse) {
       if (typeof test === 'function' && typeof visitor !== 'function') {
