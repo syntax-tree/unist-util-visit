@@ -49,7 +49,7 @@
   "dependencies": {
     "@types/unist": "^2.0.0",
     "unist-util-is": "^5.0.0",
-    "unist-util-visit-parents": "^4.0.0"
+    "unist-util-visit-parents": "^5.0.0"
   },
   "devDependencies": {
     "@types/tape": "^4.0.0",
