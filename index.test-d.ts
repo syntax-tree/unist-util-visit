@@ -1,19 +1,34 @@
 /* eslint-disable @typescript-eslint/no-confusing-void-expression, @typescript-eslint/no-empty-function */
 
-import {expectError} from 'tsd'
-import {Node, Parent} from 'unist'
+import {expectError, expectType} from 'tsd'
+import {Node, Parent, Literal} from 'unist'
+import {is} from 'unist-util-is'
 import {visit, SKIP, EXIT, CONTINUE} from './index.js'
 
 /* Setup */
-const sampleTree = {
+const sampleTree: Root = {
   type: 'root',
   children: [{type: 'heading', depth: 1, children: []}]
 }
 
-interface Heading extends Parent {
-  type: 'heading'
-  depth: number
-  children: Node[]
+const complexTree: Root = {
+  type: 'root',
+  children: [
+    {
+      type: 'blockquote',
+      children: [{type: 'paragraph', children: [{type: 'text', value: 'a'}]}]
+    },
+    {
+      type: 'paragraph',
+      children: [
+        {
+          type: 'emphasis',
+          children: [{type: 'emphasis', children: [{type: 'text', value: 'b'}]}]
+        },
+        {type: 'text', value: 'c'}
+      ]
+    }
+  ]
 }
 
 interface Element extends Parent {
@@ -22,6 +37,43 @@ interface Element extends Parent {
   properties: Record<string, unknown>
   content: Node
   children: Node[]
+}
+
+type Content = Flow | Phrasing
+
+interface Root extends Parent {
+  type: 'root'
+  children: Flow[]
+}
+
+type Flow = Blockquote | Heading | Paragraph
+
+interface Blockquote extends Parent {
+  type: 'blockquote'
+  children: Flow[]
+}
+
+interface Heading extends Parent {
+  type: 'heading'
+  depth: number
+  children: Phrasing[]
+}
+
+interface Paragraph extends Parent {
+  type: 'paragraph'
+  children: Phrasing[]
+}
+
+type Phrasing = Text | Emphasis
+
+interface Emphasis extends Parent {
+  type: 'emphasis'
+  children: Phrasing[]
+}
+
+interface Text extends Literal {
+  type: 'text'
+  value: string
 }
 
 const isNode = (node: unknown): node is Node =>
@@ -36,68 +88,98 @@ expectError(visit())
 expectError(visit(sampleTree))
 
 /* Visit without test. */
-visit(sampleTree, (_) => {})
-visit(sampleTree, (_: Node) => {})
-expectError(visit(sampleTree, (_: Element) => {}))
-expectError(visit(sampleTree, (_: Heading) => {}))
+visit(sampleTree, (node) => {
+  expectType<Root | Content>(node)
+})
 
 /* Visit with type test. */
-visit(sampleTree, 'heading', (_) => {})
-visit(sampleTree, 'heading', (_: Heading) => {})
-expectError(visit(sampleTree, 'not-a-heading', (_: Heading) => {}))
-expectError(visit(sampleTree, 'element', (_: Heading) => {}))
-
-visit(sampleTree, 'element', (_) => {})
-visit(sampleTree, 'element', (_: Element) => {})
-expectError(visit(sampleTree, 'not-an-element', (_: Element) => {}))
+visit(sampleTree, 'heading', (node) => {
+  expectType<Heading>(node)
+})
+visit(sampleTree, 'element', (node) => {
+  // Not in tree.
+  expectType<never>(node)
+})
 expectError(visit(sampleTree, 'heading', (_: Element) => {}))
 
 /* Visit with object test. */
-visit(sampleTree, {type: 'heading'}, (_) => {})
-visit(sampleTree, {random: 'property'}, (_) => {})
-
-visit(sampleTree, {type: 'heading'}, (_: Heading) => {})
-visit(sampleTree, {type: 'heading', depth: 2}, (_: Heading) => {})
-expectError(visit(sampleTree, {type: 'element'}, (_: Heading) => {}))
-expectError(
-  visit(sampleTree, {type: 'heading', depth: '2'}, (_: Heading) => {})
-)
-
-visit(sampleTree, {type: 'element'}, (_: Element) => {})
-visit(sampleTree, {type: 'element', tagName: 'section'}, (_: Element) => {})
-
-expectError(visit(sampleTree, {type: 'heading'}, (_: Element) => {}))
-
-expectError(
-  visit(sampleTree, {type: 'element', tagName: true}, (_: Element) => {})
-)
+visit(sampleTree, {depth: 1}, (node) => {
+  expectType<Heading>(node)
+})
+visit(sampleTree, {random: 'property'}, (node) => {
+  expectType<never>(node)
+})
+visit(sampleTree, {type: 'heading', depth: '2'}, (node) => {
+  // Not in tree.
+  expectType<never>(node)
+})
+visit(sampleTree, {tagName: 'section'}, (node) => {
+  // Not in tree.
+  expectType<never>(node)
+})
+visit(sampleTree, {type: 'element', tagName: 'section'}, (node) => {
+  // Not in tree.
+  expectType<never>(node)
+})
 
 /* Visit with function test. */
-visit(sampleTree, headingTest, (_) => {})
-visit(sampleTree, headingTest, (_: Heading) => {})
+visit(sampleTree, headingTest, (node) => {
+  expectType<Heading>(node)
+})
 expectError(visit(sampleTree, headingTest, (_: Element) => {}))
-
-visit(sampleTree, elementTest, (_) => {})
-visit(sampleTree, elementTest, (_: Element) => {})
-expectError(visit(sampleTree, elementTest, (_: Heading) => {}))
+visit(sampleTree, elementTest, (node) => {
+  // Not in tree.
+  expectType<never>(node)
+})
 
 /* Visit with array of tests. */
-visit(sampleTree, ['ParagraphNode', {type: 'element'}, headingTest], (_) => {})
+visit(sampleTree, ['heading', {depth: 1}, headingTest], (node) => {
+  // Unfortunately TS casts things in arrays too vague.
+  expectType<Root | Content>(node)
+})
 
 /* Visit returns action. */
-visit(sampleTree, 'heading', (_) => CONTINUE)
-visit(sampleTree, 'heading', (_) => EXIT)
-visit(sampleTree, 'heading', (_) => SKIP)
-expectError(visit(sampleTree, 'heading', (_) => 'random'))
+visit(sampleTree, () => CONTINUE)
+visit(sampleTree, () => EXIT)
+visit(sampleTree, () => SKIP)
+expectError(visit(sampleTree, () => 'random'))
 
 /* Visit returns index. */
-visit(sampleTree, 'heading', (_) => 0)
-visit(sampleTree, 'heading', (_) => 1)
+visit(sampleTree, () => 0)
+visit(sampleTree, () => 1)
 
 /* Visit returns tuple. */
-visit(sampleTree, 'heading', (_) => [CONTINUE, 1])
-visit(sampleTree, 'heading', (_) => [EXIT, 1])
-visit(sampleTree, 'heading', (_) => [SKIP, 1])
-visit(sampleTree, 'heading', (_) => [SKIP])
-expectError(visit(sampleTree, 'heading', (_) => [1]))
-expectError(visit(sampleTree, 'heading', (_) => ['random', 1]))
+visit(sampleTree, () => [CONTINUE, 1])
+visit(sampleTree, () => [EXIT, 1])
+visit(sampleTree, () => [SKIP, 1])
+visit(sampleTree, () => [SKIP])
+expectError(visit(sampleTree, () => [1]))
+expectError(visit(sampleTree, () => ['random', 1]))
+
+/* Should infer children from the given tree. */
+visit(complexTree, (node) => {
+  expectType<Root | Content>(node)
+})
+
+const blockquote = complexTree.children[0]
+if (is<Blockquote>(blockquote, 'blockquote')) {
+  visit(blockquote, (node) => {
+    expectType<Content>(node)
+  })
+}
+
+const paragraph = complexTree.children[1]
+if (is<Paragraph>(paragraph, 'paragraph')) {
+  visit(paragraph, (node) => {
+    expectType<Paragraph | Phrasing>(node)
+  })
+
+  const child = paragraph.children[1]
+
+  if (is<Emphasis>(child, 'emphasis')) {
+    visit(child, 'blockquote', (node) => {
+      // `blockquote` does not exist in phrasing.
+      expectType<never>(node)
+    })
+  }
+}
