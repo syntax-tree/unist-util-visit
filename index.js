@@ -20,7 +20,7 @@
  * @callback Visitor
  * @param {V} node Found node
  * @param {number|null} index Position of `node` in `parent`
- * @param {Parent|null} parent Parent of `node`
+ * @param {import('unist').Parent<V>|null} parent Parent of `node`
  * @returns {VisitorResult}
  */
 
