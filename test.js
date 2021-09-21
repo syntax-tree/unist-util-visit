@@ -6,7 +6,7 @@
 
 import assert from 'node:assert'
 import test from 'tape'
-import remark from 'remark'
+import {remark} from 'remark'
 import gfm from 'remark-gfm'
 import {visit, CONTINUE, EXIT, SKIP} from './index.js'
 
