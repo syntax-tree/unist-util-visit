@@ -88,17 +88,21 @@ expectError(visit())
 expectError(visit(sampleTree))
 
 /* Visit without test. */
-visit(sampleTree, (node) => {
+visit(sampleTree, (node, _, parent) => {
   expectType<Root | Content>(node)
+  expectType<Extract<Root | Content, Parent> | null>(parent)
 })
 
 /* Visit with type test. */
-visit(sampleTree, 'heading', (node) => {
+visit(sampleTree, 'heading', (node, _, parent) => {
   expectType<Heading>(node)
+  expectType<Root | Blockquote | null>(parent)
 })
-visit(sampleTree, 'element', (node) => {
+visit(sampleTree, 'element', (node, index, parent) => {
   // Not in tree.
   expectType<never>(node)
+  expectType<never>(index)
+  expectType<never>(parent)
 })
 expectError(visit(sampleTree, 'heading', (_: Element) => {}))
 
@@ -157,29 +161,34 @@ expectError(visit(sampleTree, () => [1]))
 expectError(visit(sampleTree, () => ['random', 1]))
 
 /* Should infer children from the given tree. */
-visit(complexTree, (node) => {
+visit(complexTree, (node, _, parent) => {
   expectType<Root | Content>(node)
+  expectType<Extract<Root | Content, Parent> | null>(parent)
 })
 
 const blockquote = complexTree.children[0]
 if (is<Blockquote>(blockquote, 'blockquote')) {
-  visit(blockquote, (node) => {
+  visit(blockquote, (node, _, parent) => {
     expectType<Content>(node)
+    expectType<Extract<Content, Parent> | null>(parent)
   })
 }
 
 const paragraph = complexTree.children[1]
 if (is<Paragraph>(paragraph, 'paragraph')) {
-  visit(paragraph, (node) => {
+  visit(paragraph, (node, _, parent) => {
     expectType<Paragraph | Phrasing>(node)
+    expectType<Paragraph | Emphasis | null>(parent)
   })
 
   const child = paragraph.children[1]
 
   if (is<Emphasis>(child, 'emphasis')) {
-    visit(child, 'blockquote', (node) => {
+    visit(child, 'blockquote', (node, index, parent) => {
       // `blockquote` does not exist in phrasing.
       expectType<never>(node)
+      expectType<never>(index)
+      expectType<never>(parent)
     })
   }
 }

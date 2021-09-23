@@ -1,5 +1,6 @@
 .DS_Store
-*.d.ts
+index.d.ts
+test.d.ts
 *.log
 coverage/
 node_modules/
