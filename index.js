@@ -16,7 +16,7 @@ export {CONTINUE, SKIP, EXIT}
  * @param tree Abstract syntax tree to walk
  * @param test Test, optional
  * @param visitor Function to run for each node
- * @param reverse Fisit the tree in reverse, defaults to false
+ * @param reverse Visit the tree in reverse, defaults to false
  */
 export const visit =
   /**
