@@ -8,17 +8,54 @@
 [![Backers][backers-badge]][collective]
 [![Chat][chat-badge]][chat]
 
-[**unist**][unist] utility to visit nodes.
+[unist][] utility to walk the tree.
+
+## Contents
+
+*   [What is this?](#what-is-this)
+*   [When should I use this?](#when-should-i-use-this)
+*   [Install](#install)
+*   [Use](#use)
+*   [API](#api)
+    *   [`visit(tree[, test], visitor[, reverse])`](#visittree-test-visitor-reverse)
+*   [Types](#types)
+*   [Compatibility](#compatibility)
+*   [Related](#related)
+*   [Contribute](#contribute)
+*   [License](#license)
+
+## What is this?
+
+This is a very important utility for working with unist as it lets you walk the
+tree.
+
+## When should I use this?
+
+You can use this utility when you want to walk the tree.
+You can use [`unist-util-visit-parents`][vp] if you care about the entire stack
+of parents.
 
 ## Install
 
-This package is [ESM only](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c):
-Node 12+ is needed to use it and it must be `import`ed instead of `require`d.
-
-[npm][]:
+This package is [ESM only][esm].
+In Node.js (version 12.20+, 14.14+, 16.0+, 18.0+), install with [npm][]:
 
 ```sh
 npm install unist-util-visit
+```
+
+In Deno with [`esm.sh`][esmsh]:
+
+```js
+import {visit} from "https://esm.sh/unist-util-visit@4"
+```
+
+In browsers with [`esm.sh`][esmsh]:
+
+```html
+<script type="module">
+  import {visit} from "https://esm.sh/unist-util-visit@4?bundle"
+</script>
 ```
 
 ## Use
@@ -42,21 +79,14 @@ visit(tree, 'leaf', (node) => {
 Yields:
 
 ```js
-{ type: 'leaf', value: '1' }
-{ type: 'leaf', value: '2' }
-{ type: 'leaf', value: '3' }
-```
-
-Note: this example also uses `unist-builder`, to run the example ensure both `unist-builder` and `unist-util-visit` are installed:
-
-```sh
-npm install unist-builder unist-util-visit
+{type: 'leaf', value: '1'}
+{type: 'leaf', value: '2'}
+{type: 'leaf', value: '3'}
 ```
 
 ## API
 
-This package exports the following identifiers: `visit`, `CONTINUE`, `SKIP`, and
-`EXIT`.
+This package exports the identifiers `visit`, `CONTINUE`, `SKIP`, and `EXIT`.
 There is no default export.
 
 ### `visit(tree[, test], visitor[, reverse])`
@@ -67,30 +97,45 @@ but `visitor` has a different signature.
 #### `next? = visitor(node, index, parent)`
 
 Instead of being passed an array of ancestors, `visitor` is called with the
-`node`’s [`index`][index] and its [`parent`][parent].  The optional return value
-`next` is documented in [`unist-util-visit-parents`][vp]’s readme.
+`node`’s [`index`][index] and its [`parent`][parent].
 
-Otherwise the same as [`unist-util-visit-parents`][vp].
+Please see [`unist-util-visit-parents`][vp].
+
+## Types
+
+This package is fully typed with [TypeScript][].
+It exports the additional types `Test`, `VisitorResult`, and `Visitor`.
+
+It also exports the types `BuildVisitor<Tree extends Node = Node, Check extends
+Test = string>` to properly type visitors from a tree and a test, from
+`unist-util-visit-parents/complex-types.d.ts`.
+
+## Compatibility
+
+Projects maintained by the unified collective are compatible with all maintained
+versions of Node.js.
+As of now, that is Node.js 12.20+, 14.14+, 16.0+, and 18.0+.
+Our projects sometimes work with older versions, but this is not guaranteed.
 
 ## Related
 
 *   [`unist-util-visit-parents`][vp]
-    — Like `visit`, but with a stack of parents
+    — walk the tree with a stack of parents
 *   [`unist-util-filter`](https://github.com/syntax-tree/unist-util-filter)
-    — Create a new tree with all nodes that pass a test
+    — create a new tree with all nodes that pass a test
 *   [`unist-util-map`](https://github.com/syntax-tree/unist-util-map)
-    — Create a new tree with all nodes mapped by a given function
+    — create a new tree with all nodes mapped by a given function
 *   [`unist-util-flatmap`](https://gitlab.com/staltz/unist-util-flatmap)
-    — Create a new tree by mapping (to an array) with the given function
+    — create a new tree by mapping (to an array) with the given function
 *   [`unist-util-remove`](https://github.com/syntax-tree/unist-util-remove)
-    — Remove nodes from a tree that pass a test
+    — remove nodes from a tree that pass a test
 *   [`unist-util-select`](https://github.com/syntax-tree/unist-util-select)
-    — Select nodes with CSS-like selectors
+    — select nodes with CSS-like selectors
 
 ## Contribute
 
-See [`contributing.md` in `syntax-tree/.github`][contributing] for ways to get
-started.
+See [`contributing.md`][contributing] in [`syntax-tree/.github`][health] for
+ways to get started.
 See [`support.md`][support] for ways to get help.
 
 This project has a [code of conduct][coc].
@@ -131,15 +176,23 @@ abide by its terms.
 
 [npm]: https://docs.npmjs.com/cli/install
 
+[esm]: https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c
+
+[esmsh]: https://esm.sh
+
+[typescript]: https://www.typescriptlang.org
+
 [license]: license
 
 [author]: https://wooorm.com
 
-[contributing]: https://github.com/syntax-tree/.github/blob/HEAD/contributing.md
+[health]: https://github.com/syntax-tree/.github
 
-[support]: https://github.com/syntax-tree/.github/blob/HEAD/support.md
+[contributing]: https://github.com/syntax-tree/.github/blob/main/contributing.md
 
-[coc]: https://github.com/syntax-tree/.github/blob/HEAD/code-of-conduct.md
+[support]: https://github.com/syntax-tree/.github/blob/main/support.md
+
+[coc]: https://github.com/syntax-tree/.github/blob/main/code-of-conduct.md
 
 [unist]: https://github.com/syntax-tree/unist
 
