@@ -6,9 +6,7 @@
  * @typedef {import('./complex-types').Visitor} Visitor
  */
 
-import {visitParents, CONTINUE, SKIP, EXIT} from 'unist-util-visit-parents'
-
-export {CONTINUE, SKIP, EXIT}
+import {visitParents} from 'unist-util-visit-parents'
 
 /**
  * Visit children of tree which pass a test
@@ -43,7 +41,7 @@ export const visit =
 
       /**
        * @param {Node} node
-       * @param {Array.<Parent>} parents
+       * @param {Array<Parent>} parents
        */
       function overload(node, parents) {
         const parent = parents[parents.length - 1]
@@ -55,3 +53,4 @@ export const visit =
       }
     }
   )
+export {CONTINUE, EXIT, SKIP} from 'unist-util-visit-parents'

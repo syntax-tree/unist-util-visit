@@ -36,39 +36,39 @@ interface Element extends Parent {
   tagName: string
   properties: Record<string, unknown>
   content: Node
-  children: Node[]
+  children: Array<Node>
 }
 
 type Content = Flow | Phrasing
 
 interface Root extends Parent {
   type: 'root'
-  children: Flow[]
+  children: Array<Flow>
 }
 
 type Flow = Blockquote | Heading | Paragraph
 
 interface Blockquote extends Parent {
   type: 'blockquote'
-  children: Flow[]
+  children: Array<Flow>
 }
 
 interface Heading extends Parent {
   type: 'heading'
   depth: number
-  children: Phrasing[]
+  children: Array<Phrasing>
 }
 
 interface Paragraph extends Parent {
   type: 'paragraph'
-  children: Phrasing[]
+  children: Array<Phrasing>
 }
 
 type Phrasing = Text | Emphasis
 
 interface Emphasis extends Parent {
   type: 'emphasis'
-  children: Phrasing[]
+  children: Array<Phrasing>
 }
 
 interface Text extends Literal {
