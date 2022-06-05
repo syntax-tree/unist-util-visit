@@ -6,11 +6,12 @@
 
 import assert from 'node:assert'
 import test from 'tape'
-import {remark} from 'remark'
-import gfm from 'remark-gfm'
+import {fromMarkdown} from 'mdast-util-from-markdown'
+import {gfmFromMarkdown} from 'mdast-util-gfm'
+import {gfm} from 'micromark-extension-gfm'
 import {visit, CONTINUE, EXIT, SKIP} from './index.js'
 
-const tree = remark().parse('Some _emphasis_, **importance**, and `code`.')
+const tree = fromMarkdown('Some _emphasis_, **importance**, and `code`.')
 
 const stopIndex = 5
 const skipIndex = 7
@@ -425,14 +426,13 @@ test('unist-util-visit', (t) => {
   })
 
   t.test('should visit added nodes', (t) => {
-    const tree = remark().parse('Some _emphasis_, **importance**, and `code`.')
-
-    // Unified doesn't know parse result type,
-    // all we know is that it's a node, but we know it is a parent, so we
-    // assert that here
-    const other = /** @type{Parent} */ (
-      remark().use(gfm).parse('Another ~~sentence~~.')
-    ).children[0]
+    const tree = fromMarkdown('Some _emphasis_, **importance**, and `code`.')
+    const other = /** @type {Parent} */ (
+      fromMarkdown('Another ~~sentence~~.', {
+        extensions: [gfm()],
+        mdastExtensions: [gfmFromMarkdown()]
+      }).children[0]
+    )
 
     const l = types.length + 5 // (p, text, delete, text, text)
     let n = 0
