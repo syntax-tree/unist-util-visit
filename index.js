@@ -9,12 +9,16 @@
 import {visitParents} from 'unist-util-visit-parents'
 
 /**
- * Visit children of tree which pass a test
+ * Visit children of tree which pass test.
  *
- * @param tree Abstract syntax tree to walk
- * @param test Test, optional
- * @param visitor Function to run for each node
- * @param reverse Visit the tree in reverse, defaults to false
+ * @param tree
+ *   Tree to walk
+ * @param [test]
+ *   `unist-util-is`-compatible test
+ * @param visitor
+ *   Function called for nodes that pass `test`.
+ * @param reverse
+ *   Traverse in reverse preorder (NRL) instead of preorder (NLR) (default).
  */
 export const visit =
   /**
@@ -53,4 +57,5 @@ export const visit =
       }
     }
   )
+
 export {CONTINUE, EXIT, SKIP} from 'unist-util-visit-parents'
