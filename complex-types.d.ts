@@ -4,7 +4,7 @@ import type {
   VisitorResult,
   Matches,
   InclusiveDescendant
-} from 'unist-util-visit-parents/complex-types'
+} from 'unist-util-visit-parents/complex-types.js'
 
 /**
  * Called when a node (matching test, if given) is found.
