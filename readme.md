@@ -18,6 +18,16 @@
 *   [Use](#use)
 *   [API](#api)
     *   [`visit(tree[, test], visitor[, reverse])`](#visittree-test-visitor-reverse)
+    *   [`CONTINUE`](#continue)
+    *   [`EXIT`](#exit)
+    *   [`SKIP`](#skip)
+    *   [`Action`](#action)
+    *   [`ActionTuple`](#actiontuple)
+    *   [`BuildVisitor`](#buildvisitor)
+    *   [`Index`](#index)
+    *   [`Test`](#test)
+    *   [`Visitor`](#visitor)
+    *   [`VisitorResult`](#visitorresult)
 *   [Types](#types)
 *   [Compatibility](#compatibility)
 *   [Related](#related)
@@ -38,7 +48,7 @@ of parents.
 ## Install
 
 This package is [ESM only][esm].
-In Node.js (version 12.20+, 14.14+, 16.0+, 18.0+), install with [npm][]:
+In Node.js (version 14.14+ and 16.0+), install with [npm][]:
 
 ```sh
 npm install unist-util-visit
@@ -47,14 +57,14 @@ npm install unist-util-visit
 In Deno with [`esm.sh`][esmsh]:
 
 ```js
-import {visit} from "https://esm.sh/unist-util-visit@4"
+import {visit} from 'https://esm.sh/unist-util-visit@4'
 ```
 
 In browsers with [`esm.sh`][esmsh]:
 
 ```html
 <script type="module">
-  import {visit} from "https://esm.sh/unist-util-visit@4?bundle"
+  import {visit} from 'https://esm.sh/unist-util-visit@4?bundle'
 </script>
 ```
 
@@ -86,29 +96,102 @@ Yields:
 
 ## API
 
-This package exports the identifiers `visit`, `CONTINUE`, `SKIP`, and `EXIT`.
+This package exports the identifiers [`CONTINUE`][api-continue],
+[`EXIT`][api-exit], [`SKIP`][api-skip], and [`visit`][api-visit].
 There is no default export.
 
 ### `visit(tree[, test], visitor[, reverse])`
 
 This function works exactly the same as [`unist-util-visit-parents`][vp],
-but `visitor` has a different signature.
+but [`Visitor`][api-visitor] has a different signature.
 
-#### `next? = visitor(node, index, parent)`
+### `CONTINUE`
 
-Instead of being passed an array of ancestors, `visitor` is called with the
-`node`’s [`index`][index] and its [`parent`][parent].
+Continue traversing as normal (`true`).
 
-Please see [`unist-util-visit-parents`][vp].
+### `EXIT`
+
+Stop traversing immediately (`false`).
+
+### `SKIP`
+
+Do not traverse this node’s children (`'skip'`).
+
+### `Action`
+
+Union of the action types (TypeScript type).
+See [`Action` in `unist-util-visit-parents`][vp-action].
+
+### `ActionTuple`
+
+List with an action and an index (TypeScript type).
+See [`ActionTuple` in `unist-util-visit-parents`][vp-actiontuple].
+
+### `BuildVisitor`
+
+Build a typed `Visitor` function from a tree and a test (TypeScript type).
+See [`BuildVisitor` in `unist-util-visit-parents`][vp-buildvisitor].
+
+### `Index`
+
+Move to the sibling at `index` next (TypeScript type).
+See [`Index` in `unist-util-visit-parents`][vp-index].
+
+### `Test`
+
+[`unist-util-is`][unist-util-is] compatible test (TypeScript type).
+
+### `Visitor`
+
+Handle a node (matching `test`, if given) (TypeScript type).
+
+Visitors are free to transform `node`.
+They can also transform `parent`.
+
+Replacing `node` itself, if `SKIP` is not returned, still causes its
+descendants to be walked (which is a bug).
+
+When adding or removing previous siblings of `node` (or next siblings, in
+case of reverse), the `Visitor` should return a new `Index` to specify the
+sibling to traverse after `node` is traversed.
+Adding or removing next siblings of `node` (or previous siblings, in case
+of reverse) is handled as expected without needing to return a new `Index`.
+
+Removing the children property of `parent` still results in them being
+traversed.
+
+###### Parameters
+
+*   `node` ([`Node`][node])
+    — found node
+*   `index` (`number` or `null`)
+    — index of `node` in `parent`
+*   `parent` ([`Node`][node] or `null`)
+    — parent of `node`
+
+###### Returns
+
+What to do next.
+
+An `Index` is treated as a tuple of `[CONTINUE, Index]`.
+An `Action` is treated as a tuple of `[Action]`.
+
+Passing a tuple back only makes sense if the `Action` is `SKIP`.
+When the `Action` is `EXIT`, that action can be returned.
+When the `Action` is `CONTINUE`, `Index` can be returned.
+
+### `VisitorResult`
+
+Any value that can be returned from a visitor (TypeScript type).
+See [`VisitorResult` in `unist-util-visit-parents`][vp-visitorresult].
 
 ## Types
 
 This package is fully typed with [TypeScript][].
-It exports the additional types `Test`, `VisitorResult`, and `Visitor`.
-
-It also exports the types `BuildVisitor<Tree extends Node = Node, Check extends
-Test = string>` to properly type visitors from a tree and a test, from
-`unist-util-visit-parents/complex-types.d.ts`.
+It exports the additional types [`Action`][api-action],
+[`ActionTuple`][api-actiontuple], [`BuildVisitor`][api-buildvisitor],
+[`Index`][api-index], [`Test`][api-test], [`Visitor`][api-visitor], and
+[`VisitorResult`][api-visitorresult].
 
 ## Compatibility
 
@@ -196,8 +279,40 @@ abide by its terms.
 
 [unist]: https://github.com/syntax-tree/unist
 
+[node]: https://github.com/syntax-tree/unist#nodes
+
+[unist-util-is]: https://github.com/syntax-tree/unist-util-is
+
 [vp]: https://github.com/syntax-tree/unist-util-visit-parents
 
-[index]: https://github.com/syntax-tree/unist#index
+[vp-action]: https://github.com/syntax-tree/unist-util-visit-parents#action
 
-[parent]: https://github.com/syntax-tree/unist#parent-1
+[vp-actiontuple]: https://github.com/syntax-tree/unist-util-visit-parents#actiontuple
+
+[vp-buildvisitor]: https://github.com/syntax-tree/unist-util-visit-parents#buildvisitor
+
+[vp-index]: https://github.com/syntax-tree/unist-util-visit-parents#index
+
+[vp-visitorresult]: https://github.com/syntax-tree/unist-util-visit-parents#visitorresult
+
+[api-visit]: #visittree-test-visitor-reverse
+
+[api-continue]: #continue
+
+[api-exit]: #exit
+
+[api-skip]: #skip
+
+[api-action]: #action
+
+[api-actiontuple]: #actiontuple
+
+[api-buildvisitor]: #buildvisitor
+
+[api-index]: #index
+
+[api-test]: #test
+
+[api-visitor]: #visitor
+
+[api-visitorresult]: #visitorresult
