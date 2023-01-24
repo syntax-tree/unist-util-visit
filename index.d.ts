@@ -5,6 +5,5 @@ export type {
   Index,
   VisitorResult
 } from 'unist-util-visit-parents'
-export {CONTINUE, EXIT, SKIP} from 'unist-util-visit-parents'
 export type {Visitor, BuildVisitor} from './lib/index.js'
-export {visit} from './lib/index.js'
+export {CONTINUE, EXIT, SKIP, visit} from './lib/index.js'
