@@ -1,5 +1,5 @@
 .DS_Store
-index.d.ts
+lib/index.d.ts
 test.d.ts
 *.log
 coverage/

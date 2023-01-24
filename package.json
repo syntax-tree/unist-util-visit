@@ -43,6 +43,7 @@
   "main": "index.js",
   "types": "index.d.ts",
   "files": [
+    "lib/",
     "complex-types.d.ts",
     "index.d.ts",
     "index.js"
@@ -92,7 +93,7 @@
   },
   "remarkConfig": {
     "plugins": [
-      "preset-wooorm"
+      "remark-preset-wooorm"
     ]
   },
   "typeCoverage": {
