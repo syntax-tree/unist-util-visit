@@ -9,6 +9,7 @@ import {fromMarkdown} from 'mdast-util-from-markdown'
 import {gfmFromMarkdown} from 'mdast-util-gfm'
 import {gfm} from 'micromark-extension-gfm'
 import {visit, CONTINUE, EXIT, SKIP} from './index.js'
+import * as mod from './index.js'
 
 const tree = fromMarkdown('Some _emphasis_, **importance**, and `code`.')
 
@@ -47,7 +48,13 @@ const reverseTypes = [
   'text'
 ]
 
-test('visit', async (t) => {
+test('visit', async function (t) {
+  assert.deepEqual(
+    Object.keys(mod).sort(),
+    ['CONTINUE', 'EXIT', 'SKIP', 'visit'],
+    'should expose the public api'
+  )
+
   assert.throws(
     () => {
       // @ts-expect-error runtime.
