@@ -48,7 +48,7 @@ of parents.
 ## Install
 
 This package is [ESM only][esm].
-In Node.js (version 14.14+ and 16.0+), install with [npm][]:
+In Node.js (version 16+), install with [npm][]:
 
 ```sh
 npm install unist-util-visit
@@ -57,41 +57,39 @@ npm install unist-util-visit
 In Deno with [`esm.sh`][esmsh]:
 
 ```js
-import {visit} from 'https://esm.sh/unist-util-visit@4'
+import {CONTINUE, EXIT, SKIP, visit} from 'https://esm.sh/unist-util-visit@4'
 ```
 
 In browsers with [`esm.sh`][esmsh]:
 
 ```html
 <script type="module">
-  import {visit} from 'https://esm.sh/unist-util-visit@4?bundle'
+  import {CONTINUE, EXIT, SKIP, visit} from 'https://esm.sh/unist-util-visit@4?bundle'
 </script>
 ```
 
 ## Use
 
 ```js
-import {u} from 'unist-builder'
+import {fromMarkdown} from 'mdast-util-from-markdown'
 import {visit} from 'unist-util-visit'
 
-const tree = u('tree', [
-  u('leaf', '1'),
-  u('node', [u('leaf', '2')]),
-  u('void'),
-  u('leaf', '3')
-])
+const tree = fromMarkdown('Some *emphasis*, **strong**, and `code`.')
 
-visit(tree, 'leaf', function (node) {
-  console.log(node)
+visit(tree, 'text', function (node, index, parent) {
+  console.log([node.value, parent ? parent.type : index])
 })
 ```
 
 Yields:
 
 ```js
-{type: 'leaf', value: '1'}
-{type: 'leaf', value: '2'}
-{type: 'leaf', value: '3'}
+[ 'Some ', 'paragraph' ]
+[ 'emphasis', 'emphasis' ]
+[ ', ', 'paragraph' ]
+[ 'strong', 'strong' ]
+[ ', and ', 'paragraph' ]
+[ '.', 'paragraph' ]
 ```
 
 ## API
@@ -125,12 +123,12 @@ See [`Action` in `unist-util-visit-parents`][vp-action].
 ### `ActionTuple`
 
 List with an action and an index (TypeScript type).
-See [`ActionTuple` in `unist-util-visit-parents`][vp-actiontuple].
+See [`ActionTuple` in `unist-util-visit-parents`][vp-action-tuple].
 
 ### `BuildVisitor`
 
 Build a typed `Visitor` function from a tree and a test (TypeScript type).
-See [`BuildVisitor` in `unist-util-visit-parents`][vp-buildvisitor].
+See [`BuildVisitor` in `unist-util-visit-parents`][vp-build-visitor].
 
 ### `Index`
 
@@ -183,22 +181,25 @@ When the `Action` is `CONTINUE`, `Index` can be returned.
 ### `VisitorResult`
 
 Any value that can be returned from a visitor (TypeScript type).
-See [`VisitorResult` in `unist-util-visit-parents`][vp-visitorresult].
+See [`VisitorResult` in `unist-util-visit-parents`][vp-visitor-result].
 
 ## Types
 
 This package is fully typed with [TypeScript][].
 It exports the additional types [`Action`][api-action],
-[`ActionTuple`][api-actiontuple], [`BuildVisitor`][api-buildvisitor],
+[`ActionTuple`][api-action-tuple], [`BuildVisitor`][api-build-visitor],
 [`Index`][api-index], [`Test`][api-test], [`Visitor`][api-visitor], and
-[`VisitorResult`][api-visitorresult].
+[`VisitorResult`][api-visitor-result].
 
 ## Compatibility
 
-Projects maintained by the unified collective are compatible with all maintained
+Projects maintained by the unified collective are compatible with maintained
 versions of Node.js.
-As of now, that is Node.js 12.20+, 14.14+, 16.0+, and 18.0+.
-Our projects sometimes work with older versions, but this is not guaranteed.
+
+When we cut a new major release, we drop support for unmaintained versions of
+Node.
+This means we try to keep the current release line, `unist-util-visit@^4`,
+compatible with Node.js 12.
 
 ## Related
 
@@ -243,9 +244,9 @@ abide by its terms.
 
 [downloads]: https://www.npmjs.com/package/unist-util-visit
 
-[size-badge]: https://img.shields.io/bundlephobia/minzip/unist-util-visit.svg
+[size-badge]: https://img.shields.io/badge/dynamic/json?label=minzipped%20size&query=$.size.compressedSize&url=https://deno.bundlejs.com/?q=unist-util-visit
 
-[size]: https://bundlephobia.com/result?p=unist-util-visit
+[size]: https://bundlejs.com/?q=unist-util-visit
 
 [sponsors-badge]: https://opencollective.com/unified/sponsors/badge.svg
 
@@ -287,13 +288,13 @@ abide by its terms.
 
 [vp-action]: https://github.com/syntax-tree/unist-util-visit-parents#action
 
-[vp-actiontuple]: https://github.com/syntax-tree/unist-util-visit-parents#actiontuple
+[vp-action-tuple]: https://github.com/syntax-tree/unist-util-visit-parents#actiontuple
 
-[vp-buildvisitor]: https://github.com/syntax-tree/unist-util-visit-parents#buildvisitor
+[vp-build-visitor]: https://github.com/syntax-tree/unist-util-visit-parents#buildvisitor
 
 [vp-index]: https://github.com/syntax-tree/unist-util-visit-parents#index
 
-[vp-visitorresult]: https://github.com/syntax-tree/unist-util-visit-parents#visitorresult
+[vp-visitor-result]: https://github.com/syntax-tree/unist-util-visit-parents#visitorresult
 
 [api-visit]: #visittree-test-visitor-reverse
 
@@ -305,9 +306,9 @@ abide by its terms.
 
 [api-action]: #action
 
-[api-actiontuple]: #actiontuple
+[api-action-tuple]: #actiontuple
 
-[api-buildvisitor]: #buildvisitor
+[api-build-visitor]: #buildvisitor
 
 [api-index]: #index
 
@@ -315,4 +316,4 @@ abide by its terms.
 
 [api-visitor]: #visitor
 
-[api-visitorresult]: #visitorresult
+[api-visitor-result]: #visitorresult
