@@ -99,19 +99,6 @@
     "strict": true
   },
   "xo": {
-    "overrides": [
-      {
-        "files": [
-          "**/*.ts"
-        ],
-        "rules": {
-          "@typescript-eslint/array-type": "off",
-          "@typescript-eslint/ban-types": "off",
-          "@typescript-eslint/consistent-type-definitions": "off",
-          "@typescript-eslint/no-empty-function": "off"
-        }
-      }
-    ],
     "prettier": true
   }
 }
