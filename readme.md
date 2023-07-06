@@ -162,9 +162,9 @@ traversed.
 
 *   `node` ([`Node`][node])
     — found node
-*   `index` (`number` or `null`)
+*   `index` (`number` or `undefined`)
     — index of `node` in `parent`
-*   `parent` ([`Node`][node] or `null`)
+*   `parent` ([`Node`][node] or `undefined`)
     — parent of `node`
 
 ###### Returns

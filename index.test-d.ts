@@ -46,15 +46,15 @@ visit(sampleTree)
 // ## No test
 visit(sampleTree, function (node, index, parent) {
   expectType<Nodes>(node)
-  expectType<number | null>(index)
-  expectType<Parents | null>(parent)
+  expectType<number | undefined>(index)
+  expectType<Parents | undefined>(parent)
 })
 
 visit(implicitTree, function (node, index, parent) {
   // Objects are too loose.
   expectAssignable<Node>(node)
   expectNotType<Node>(node)
-  expectType<number | null>(index)
+  expectType<number | undefined>(index)
   expectType<never>(parent)
 })
 
@@ -63,8 +63,10 @@ visit(implicitTree, function (node, index, parent) {
 // Knows it’s a heading and its parents.
 visit(sampleTree, 'heading', function (node, index, parent) {
   expectType<Heading>(node)
-  expectType<number | null>(index)
-  expectType<Blockquote | FootnoteDefinition | ListItem | Root | null>(parent)
+  expectType<number | undefined>(index)
+  expectType<
+    Blockquote | FootnoteDefinition | ListItem | Root | undefined
+  >(parent)
 })
 
 // Not in tree.
@@ -83,8 +85,8 @@ visit(implicitTree, 'heading', function (node, index, parent) {
 
 visit(sampleTree, 'tableCell', function (node, index, parent) {
   expectType<TableCell>(node)
-  expectType<number | null>(index)
-  expectType<Root | TableRow | null>(parent)
+  expectType<number | undefined>(index)
+  expectType<Root | TableRow | undefined>(parent)
 })
 
 // ## Props test
@@ -203,7 +205,7 @@ visit(sampleTree, 'tableCell', function (node) {
       | LinkReference
       | Strong
       | TableCell
-      | null
+      | undefined
     >(parent)
   })
 })

@@ -145,6 +145,7 @@ test('visit', async function (t) {
 
       assert.equal(n, 3, 'should visit all passing nodes')
 
+      // To do: when `unist-util-is` updates, we can drop `null`.
       /**
        * @param {Node} _
        * @param {number | null | undefined} index
