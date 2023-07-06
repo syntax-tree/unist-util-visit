@@ -1,4 +1,5 @@
 /**
+ * @typedef {import('mdast').Root} Root
  * @typedef {import('unist').Node} Node
  * @typedef {import('unist').Parent} Parent
  */
@@ -8,8 +9,7 @@ import test from 'node:test'
 import {fromMarkdown} from 'mdast-util-from-markdown'
 import {gfmFromMarkdown} from 'mdast-util-gfm'
 import {gfm} from 'micromark-extension-gfm'
-import {visit, CONTINUE, EXIT, SKIP} from './index.js'
-import * as mod from './index.js'
+import {CONTINUE, EXIT, SKIP, visit} from './index.js'
 
 const tree = fromMarkdown('Some _emphasis_, **importance**, and `code`.')
 
@@ -49,193 +49,177 @@ const reverseTypes = [
 ]
 
 test('visit', async function (t) {
-  assert.deepEqual(
-    Object.keys(mod).sort(),
-    ['CONTINUE', 'EXIT', 'SKIP', 'visit'],
-    'should expose the public api'
-  )
+  await t.test('should expose the public api', async function () {
+    assert.deepEqual(Object.keys(await import('./index.js')).sort(), [
+      'CONTINUE',
+      'EXIT',
+      'SKIP',
+      'visit'
+    ])
+  })
 
-  assert.throws(
-    () => {
-      // @ts-expect-error runtime.
+  await t.test('should fail without tree', async function () {
+    assert.throws(function () {
+      // @ts-expect-error: check that the runtime throws an error.
       visit()
-    },
-    /TypeError: visitor is not a function/,
-    'should fail without tree'
-  )
+    }, /TypeError: visitor is not a function/)
+  })
 
-  assert.throws(
-    () => {
-      // @ts-expect-error runtime.
+  await t.test('should fail without visitor', async function () {
+    assert.throws(function () {
+      // @ts-expect-error: check that the runtime throws an error.
       visit(tree)
-    },
-    /TypeError: visitor is not a function/,
-    'should fail without visitor'
-  )
+    }, /TypeError: visitor is not a function/)
+  })
 
-  await t.test('should iterate over all nodes', () => {
+  await t.test('should iterate over all nodes', async function () {
     let n = 0
 
-    visit(tree, visitor)
-
-    assert.equal(n, types.length, 'should visit all nodes')
-
-    /**
-     * @param {Node} node
-     */
-    function visitor(node) {
+    visit(tree, function (node) {
       assert.strictEqual(node.type, types[n], 'should be the expected type')
       n++
-    }
+    })
+
+    assert.equal(n, types.length, 'should visit all nodes')
   })
 
-  await t.test('should iterate over all nodes, backwards', () => {
+  await t.test('should iterate over all nodes, backwards', async function () {
     let n = 0
 
-    visit(tree, visitor, true)
+    visit(
+      tree,
+      function (node) {
+        assert.strictEqual(
+          node.type,
+          reverseTypes[n],
+          'should be the expected type'
+        )
+        n++
+      },
+      true
+    )
 
     assert.equal(n, reverseTypes.length, 'should visit all nodes in reverse')
-
-    /**
-     * @param {Node} node
-     */
-    function visitor(node) {
-      assert.strictEqual(
-        node.type,
-        reverseTypes[n],
-        'should be the expected type'
-      )
-      n++
-    }
   })
 
-  await t.test('should only visit a given `type`', () => {
+  await t.test('should only visit a given `type`', async function () {
     let n = 0
 
-    visit(tree, 'text', visitor)
-
-    assert.equal(n, texts, 'should visit all matching nodes')
-
-    /**
-     * @param {Node} node
-     */
-    function visitor(node) {
+    visit(tree, 'text', function (node) {
       assert.strictEqual(node.type, 'text', 'should be the expected type')
       n++
-    }
+    })
+
+    assert.equal(n, texts, 'should visit all matching nodes')
   })
 
-  await t.test('should only visit given `type`s', () => {
+  await t.test('should only visit given `type`s', async function () {
     const types = ['text', 'inlineCode']
     let n = 0
 
-    visit(tree, types, visitor)
-
-    assert.equal(n, texts + codes, 'should visit all matching nodes')
-
-    /**
-     * @param {Node} node
-     */
-    function visitor(node) {
+    visit(tree, types, function (node) {
       n++
       assert.notStrictEqual(types.indexOf(node.type), -1, 'should match')
-    }
-  })
-
-  await t.test('should accept any `is`-compatible test function', () => {
-    let n = 0
-
-    visit(tree, test, (node, index, parent) => {
-      const info = '(' + (parent && parent.type) + ':' + index + ')'
-      assert.ok(test(node, index), 'should be a requested node ' + info)
-      n++
     })
 
-    assert.equal(n, 3, 'should visit all passing nodes')
+    assert.equal(n, texts + codes, 'should visit all matching nodes')
+  })
 
-    /**
-     * @param {Node} _
-     * @param {number|null|undefined} index
-     */
-    function test(_, index) {
-      return typeof index === 'number' && index > 3
+  await t.test(
+    'should accept any `is`-compatible test function',
+    async function () {
+      let n = 0
+
+      visit(
+        tree,
+        test,
+        /**
+         * @returns {undefined}
+         */
+        function (node, index, parent) {
+          const info = '(' + (parent && parent.type) + ':' + index + ')'
+          assert.ok(test(node, index), 'should be a requested node ' + info)
+          n++
+        }
+      )
+
+      assert.equal(n, 3, 'should visit all passing nodes')
+
+      /**
+       * @param {Node} _
+       * @param {number | null | undefined} index
+       */
+      function test(_, index) {
+        return typeof index === 'number' && index > 3
+      }
     }
-  })
+  )
 
-  await t.test('should accept an array of `is`-compatible tests', () => {
-    const expected = new Set(['root', 'paragraph', 'emphasis', 'strong'])
-    const tests = [
-      /** @param {Node} node */
-      (node) => node.type === 'root',
-      'paragraph',
-      {value: '.'},
-      'emphasis',
-      'strong'
-    ]
+  await t.test(
+    'should accept an array of `is`-compatible tests',
+    async function () {
+      const expected = new Set(['root', 'paragraph', 'emphasis', 'strong'])
+      let n = 0
+
+      visit(
+        tree,
+        [
+          function (node) {
+            return node.type === 'root'
+          },
+          'paragraph',
+          {value: '.'},
+          'emphasis',
+          'strong'
+        ],
+        function (node) {
+          const ok =
+            expected.has(node.type) || ('value' in node && node.value === '.')
+          assert.ok(ok, 'should be a requested type: ' + node.type)
+          n++
+        }
+      )
+
+      assert.equal(n, 5, 'should visit all passing nodes')
+    }
+  )
+
+  await t.test('should stop if `visitor` stops', async function () {
     let n = 0
 
-    visit(tree, tests, (node) => {
-      // @ts-expect-error: indexable.
-      const ok = expected.has(node.type) || node.value === '.'
-      assert.ok(ok, 'should be a requested type: ' + node.type)
-      n++
-    })
-
-    assert.equal(n, 5, 'should visit all passing nodes')
-  })
-
-  await t.test('should stop if `visitor` stops', () => {
-    let n = 0
-
-    visit(tree, visitor)
-
-    assert.equal(n, stopIndex, 'should visit nodes until `EXIT` is given')
-
-    /**
-     * @param {Node} node
-     */
-    function visitor(node) {
+    visit(tree, function (node) {
       assert.strictEqual(node.type, types[n++], 'should be the expected type')
       return n === stopIndex ? EXIT : CONTINUE
-    }
-  })
-
-  await t.test('should stop if `visitor` stops, backwards', () => {
-    let n = 0
-
-    visit(tree, visitor, true)
+    })
 
     assert.equal(n, stopIndex, 'should visit nodes until `EXIT` is given')
-
-    /**
-     * @param {Node} node
-     */
-    function visitor(node) {
-      assert.strictEqual(
-        node.type,
-        reverseTypes[n++],
-        'should be the expected type'
-      )
-      return n === stopIndex ? EXIT : CONTINUE
-    }
   })
 
-  await t.test('should skip if `visitor` skips', () => {
+  await t.test('should stop if `visitor` stops, backwards', async function () {
+    let n = 0
+
+    visit(
+      tree,
+      function (node) {
+        assert.strictEqual(
+          node.type,
+          reverseTypes[n++],
+          'should be the expected type'
+        )
+
+        return n === stopIndex ? EXIT : CONTINUE
+      },
+      true
+    )
+
+    assert.equal(n, stopIndex, 'should visit nodes until `EXIT` is given')
+  })
+
+  await t.test('should skip if `visitor` skips', async function () {
     let n = 0
     let count = 0
 
-    visit(tree, visitor)
-
-    assert.equal(
-      count,
-      types.length - 1,
-      'should visit nodes except when `SKIP` is given'
-    )
-
-    /**
-     * @param {Node} node
-     */
-    function visitor(node) {
+    visit(tree, function (node) {
       assert.strictEqual(node.type, types[n++], 'should be the expected type')
       count++
 
@@ -243,42 +227,47 @@ test('visit', async function (t) {
         n++ // The one node inside it.
         return SKIP
       }
-    }
+    })
+
+    assert.equal(
+      count,
+      types.length - 1,
+      'should visit nodes except when `SKIP` is given'
+    )
   })
 
-  await t.test('should skip if `visitor` skips, backwards', () => {
+  await t.test('should skip if `visitor` skips, backwards', async function () {
     let n = 0
     let count = 0
 
-    visit(tree, visitor, true)
+    visit(
+      tree,
+      function (node) {
+        assert.strictEqual(
+          node.type,
+          reverseTypes[n++],
+          'should be the expected type'
+        )
+        count++
+
+        if (n === skipReverseIndex) {
+          n++ // The one node inside it.
+          return SKIP
+        }
+      },
+      true
+    )
 
     assert.equal(
       count,
       reverseTypes.length - 1,
       'should visit nodes except when `SKIP` is given'
     )
-
-    /**
-     * @param {Node} node
-     */
-    function visitor(node) {
-      assert.strictEqual(
-        node.type,
-        reverseTypes[n++],
-        'should be the expected type'
-      )
-      count++
-
-      if (n === skipReverseIndex) {
-        n++ // The one node inside it.
-        return SKIP
-      }
-    }
   })
 
   await t.test(
     'should support a given `index` to iterate over next (`0` to reiterate)',
-    () => {
+    async function () {
       let n = 0
       let again = false
       const expected = [
@@ -301,14 +290,7 @@ test('visit', async function (t) {
         'text'
       ]
 
-      visit(tree, visitor)
-
-      assert.equal(n, expected.length, 'should visit nodes again')
-
-      /**
-       * @param {Node} node
-       */
-      function visitor(node) {
+      visit(tree, function (node) {
         assert.strictEqual(
           node.type,
           expected[n++],
@@ -319,13 +301,15 @@ test('visit', async function (t) {
           again = true
           return 0 // Start over.
         }
-      }
+      })
+
+      assert.equal(n, expected.length, 'should visit nodes again')
     }
   )
 
   await t.test(
     'should support a given `index` to iterate over next (`children.length` to skip further children)',
-    () => {
+    async function () {
       let n = 0
       let again = false
       const expected = [
@@ -339,16 +323,7 @@ test('visit', async function (t) {
         'text'
       ]
 
-      visit(tree, visitor)
-
-      assert.equal(n, expected.length, 'should skip nodes')
-
-      /**
-       * @param {Node} node
-       * @param {number|null} _
-       * @param {Parent|null} parent
-       */
-      function visitor(node, _, parent) {
+      visit(tree, function (node, _, parent) {
         assert.strictEqual(
           node.type,
           expected[n++],
@@ -359,13 +334,15 @@ test('visit', async function (t) {
           again = true
           return parent.children.length // Skip siblings.
         }
-      }
+      })
+
+      assert.equal(n, expected.length, 'should skip nodes')
     }
   )
 
   await t.test(
     'should support any other given `index` to iterate over next',
-    () => {
+    async function () {
       let n = 0
       let again = false
       const expected = [
@@ -381,15 +358,7 @@ test('visit', async function (t) {
         'text'
       ]
 
-      visit(tree, visitor)
-
-      assert.equal(n, expected.length, 'should skip nodes')
-
-      /**
-       * @param {Node} node
-       * @param {number|null} index
-       */
-      function visitor(node, index) {
+      visit(tree, function (node, index) {
         assert.strictEqual(
           node.type,
           expected[n++],
@@ -404,37 +373,31 @@ test('visit', async function (t) {
           again = true
           return index + 2 // Skip to `inlineCode`.
         }
-      }
+      })
+
+      assert.equal(n, expected.length, 'should skip nodes')
     }
   )
 
-  await t.test('should visit added nodes', () => {
+  await t.test('should visit added nodes', async function () {
     const tree = fromMarkdown('Some _emphasis_, **importance**, and `code`.')
-    const other = /** @type {Parent} */ (
-      fromMarkdown('Another ~~sentence~~.', {
-        extensions: [gfm()],
-        mdastExtensions: [gfmFromMarkdown()]
-      }).children[0]
-    )
+    const other = fromMarkdown('Another ~~sentence~~.', {
+      extensions: [gfm()],
+      mdastExtensions: [gfmFromMarkdown()]
+    }).children[0]
 
     const l = types.length + 5 // (p, text, delete, text, text)
     let n = 0
 
-    visit(tree, visitor)
-
-    assert.equal(n, l, 'should walk over all nodes')
-
-    /**
-     * @param {Node} _1
-     * @param {number|null} _2
-     * @param {Parent|null} parent
-     */
-    function visitor(_1, _2, parent) {
+    visit(tree, function (_1, _2, parent) {
       n++
 
       if (parent && n === 2) {
+        assert(parent.type === 'root')
         parent.children.push(other)
       }
-    }
+    })
+
+    assert.equal(n, l, 'should walk over all nodes')
   })
 })

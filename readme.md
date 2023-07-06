@@ -81,7 +81,7 @@ const tree = u('tree', [
   u('leaf', '3')
 ])
 
-visit(tree, 'leaf', (node) => {
+visit(tree, 'leaf', function (node) {
   console.log(node)
 })
 ```

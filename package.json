@@ -54,6 +54,7 @@
     "unist-util-visit-parents": "^5.1.1"
   },
   "devDependencies": {
+    "@types/mdast": "^3.0.0",
     "@types/node": "^20.0.0",
     "c8": "^8.0.0",
     "mdast-util-from-markdown": "^1.0.0",
@@ -95,10 +96,19 @@
     "strict": true
   },
   "xo": {
-    "prettier": true,
-    "rules": {
-      "@typescript-eslint/ban-types": "off",
-      "@typescript-eslint/array-type": "off"
-    }
+    "overrides": [
+      {
+        "files": [
+          "**/*.ts"
+        ],
+        "rules": {
+          "@typescript-eslint/array-type": "off",
+          "@typescript-eslint/ban-types": "off",
+          "@typescript-eslint/consistent-type-definitions": "off",
+          "@typescript-eslint/no-empty-function": "off"
+        }
+      }
+    ],
+    "prettier": true
   }
 }
