@@ -92,6 +92,10 @@
   "typeCoverage": {
     "atLeast": 100,
     "detail": true,
+    "#": "needed `any`s",
+    "ignoreFiles": [
+      "lib/index.d.ts"
+    ],
     "ignoreCatch": true,
     "strict": true
   },

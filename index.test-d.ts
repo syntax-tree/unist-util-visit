@@ -55,7 +55,7 @@ visit(implicitTree, function (node, index, parent) {
   expectAssignable<Node>(node)
   expectNotType<Node>(node)
   expectType<number | undefined>(index)
-  expectType<never>(parent)
+  expectAssignable<Parent | undefined>(parent)
 })
 
 // ## String test
@@ -126,8 +126,7 @@ visit(sampleTree, isHeading, function (node) {
 })
 // Function test (explicit assertion).
 visit(sampleTree, isHeading2, function (node) {
-  // To do: improving `InclusiveDescendant` should use `Heading & {depth: 2}`.
-  expectType<never>(node)
+  expectType<Heading & {depth: 2}>(node)
 })
 
 // ## Combined tests
