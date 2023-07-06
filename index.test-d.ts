@@ -18,7 +18,7 @@ import type {
   TableRow
 } from 'mdast'
 import type {Node, Parent} from 'unist'
-import {CONTINUE, EXIT, SKIP, visit} from './index.js'
+import {CONTINUE, EXIT, SKIP, visit} from 'unist-util-visit'
 
 // To do: use `mdast` when released.
 type Nodes = Root | Content
