@@ -57,14 +57,14 @@ npm install unist-util-visit
 In Deno with [`esm.sh`][esmsh]:
 
 ```js
-import {CONTINUE, EXIT, SKIP, visit} from 'https://esm.sh/unist-util-visit@4'
+import {CONTINUE, EXIT, SKIP, visit} from 'https://esm.sh/unist-util-visit@5'
 ```
 
 In browsers with [`esm.sh`][esmsh]:
 
 ```html
 <script type="module">
-  import {CONTINUE, EXIT, SKIP, visit} from 'https://esm.sh/unist-util-visit@4?bundle'
+  import {CONTINUE, EXIT, SKIP, visit} from 'https://esm.sh/unist-util-visit@5?bundle'
 </script>
 ```
 
