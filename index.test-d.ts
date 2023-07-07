@@ -1,32 +1,27 @@
 import {expectAssignable, expectNotType, expectType} from 'tsd'
 import type {
   Blockquote,
-  Content,
   Definition,
   Delete,
   Emphasis,
-  Footnote,
   FootnoteDefinition,
   Heading,
   Link,
   LinkReference,
   ListItem,
+  Nodes,
+  Parents,
   PhrasingContent,
   Root,
+  RootContent,
   Strong,
   TableCell,
   TableRow
 } from 'mdast'
 import type {Node, Parent} from 'unist'
-import {CONTINUE, EXIT, SKIP, visit} from 'unist-util-visit'
+import {CONTINUE, EXIT, SKIP, visit} from './index.js'
 
-// To do: use `mdast` when released.
-type Nodes = Root | Content
-
-// To do: use `mdast` when released.
-type Parents = Extract<Nodes, Parent>
-
-/* Setup */
+// Setup.
 const implicitTree = {
   type: 'root',
   children: [{type: 'heading', depth: 1, children: []}]
@@ -132,7 +127,7 @@ visit(sampleTree, isHeading2, function (node) {
 // ## Combined tests
 visit(sampleTree, ['heading', {depth: 1}, isHeading], function (node) {
   // Unfortunately TS casts things in arrays too vague.
-  expectType<Root | Content>(node)
+  expectType<Root | RootContent>(node)
 })
 
 // To do: update to `unist-util-is` should make this work?
@@ -141,7 +136,7 @@ visit(sampleTree, ['heading', {depth: 1}, isHeading], function (node) {
 //   ['heading', {depth: 1}, isHeading] as const,
 //   function (node) {
 //     // Unfortunately TS casts things in arrays too vague.
-//     expectType<Root | Content>(node)
+//     expectType<Root | RootContent>(node)
 //   }
 // )
 
@@ -197,14 +192,7 @@ visit(sampleTree, 'tableCell', function (node) {
   visit(node, function (node, _, parent) {
     expectType<TableCell | PhrasingContent>(node)
     expectType<
-      | Delete
-      | Emphasis
-      | Footnote
-      | Link
-      | LinkReference
-      | Strong
-      | TableCell
-      | undefined
+      Delete | Emphasis | Link | LinkReference | Strong | TableCell | undefined
     >(parent)
   })
 })

@@ -1,7 +1,6 @@
 /**
  * @typedef {import('mdast').Root} Root
  * @typedef {import('unist').Node} Node
- * @typedef {import('unist').Parent} Parent
  */
 
 import assert from 'node:assert/strict'
@@ -11,7 +10,10 @@ import {gfmFromMarkdown} from 'mdast-util-gfm'
 import {gfm} from 'micromark-extension-gfm'
 import {CONTINUE, EXIT, SKIP, visit} from 'unist-util-visit'
 
-const tree = fromMarkdown('Some _emphasis_, **importance**, and `code`.')
+// To do: remove cast after update.
+const tree = /** @type {Root} */ (
+  fromMarkdown('Some _emphasis_, **importance**, and `code`.')
+)
 
 const stopIndex = 5
 const skipIndex = 7
@@ -145,10 +147,9 @@ test('visit', async function (t) {
 
       assert.equal(n, 3, 'should visit all passing nodes')
 
-      // To do: when `unist-util-is` updates, we can drop `null`.
       /**
        * @param {Node} _
-       * @param {number | null | undefined} index
+       * @param {number | undefined} index
        */
       function test(_, index) {
         return typeof index === 'number' && index > 3
