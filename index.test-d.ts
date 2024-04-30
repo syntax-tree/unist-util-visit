@@ -59,9 +59,9 @@ visit(implicitTree, function (node, index, parent) {
 visit(sampleTree, 'heading', function (node, index, parent) {
   expectType<Heading>(node)
   expectType<number | undefined>(index)
-  expectType<
-    Blockquote | FootnoteDefinition | ListItem | Root | undefined
-  >(parent)
+  expectType<Blockquote | FootnoteDefinition | ListItem | Root | undefined>(
+    parent
+  )
 })
 
 // Not in tree.

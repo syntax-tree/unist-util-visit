@@ -12,27 +12,27 @@
 
 ## Contents
 
-*   [What is this?](#what-is-this)
-*   [When should I use this?](#when-should-i-use-this)
-*   [Install](#install)
-*   [Use](#use)
-*   [API](#api)
-    *   [`visit(tree[, test], visitor[, reverse])`](#visittree-test-visitor-reverse)
-    *   [`CONTINUE`](#continue)
-    *   [`EXIT`](#exit)
-    *   [`SKIP`](#skip)
-    *   [`Action`](#action)
-    *   [`ActionTuple`](#actiontuple)
-    *   [`BuildVisitor`](#buildvisitor)
-    *   [`Index`](#index)
-    *   [`Test`](#test)
-    *   [`Visitor`](#visitor)
-    *   [`VisitorResult`](#visitorresult)
-*   [Types](#types)
-*   [Compatibility](#compatibility)
-*   [Related](#related)
-*   [Contribute](#contribute)
-*   [License](#license)
+* [What is this?](#what-is-this)
+* [When should I use this?](#when-should-i-use-this)
+* [Install](#install)
+* [Use](#use)
+* [API](#api)
+  * [`visit(tree[, test], visitor[, reverse])`](#visittree-test-visitor-reverse)
+  * [`CONTINUE`](#continue)
+  * [`EXIT`](#exit)
+  * [`SKIP`](#skip)
+  * [`Action`](#action)
+  * [`ActionTuple`](#actiontuple)
+  * [`BuildVisitor`](#buildvisitor)
+  * [`Index`](#index)
+  * [`Test`](#test)
+  * [`Visitor`](#visitor)
+  * [`VisitorResult`](#visitorresult)
+* [Types](#types)
+* [Compatibility](#compatibility)
+* [Related](#related)
+* [Contribute](#contribute)
+* [License](#license)
 
 ## What is this?
 
@@ -160,12 +160,12 @@ traversed.
 
 ###### Parameters
 
-*   `node` ([`Node`][node])
-    — found node
-*   `index` (`number` or `undefined`)
-    — index of `node` in `parent`
-*   `parent` ([`Node`][node] or `undefined`)
-    — parent of `node`
+* `node` ([`Node`][node])
+  — found node
+* `index` (`number` or `undefined`)
+  — index of `node` in `parent`
+* `parent` ([`Node`][node] or `undefined`)
+  — parent of `node`
 
 ###### Returns
 
@@ -203,18 +203,18 @@ compatible with Node.js 16.
 
 ## Related
 
-*   [`unist-util-visit-parents`][vp]
-    — walk the tree with a stack of parents
-*   [`unist-util-filter`](https://github.com/syntax-tree/unist-util-filter)
-    — create a new tree with all nodes that pass a test
-*   [`unist-util-map`](https://github.com/syntax-tree/unist-util-map)
-    — create a new tree with all nodes mapped by a given function
-*   [`unist-util-flatmap`](https://gitlab.com/staltz/unist-util-flatmap)
-    — create a new tree by mapping (to an array) with the given function
-*   [`unist-util-remove`](https://github.com/syntax-tree/unist-util-remove)
-    — remove nodes from a tree that pass a test
-*   [`unist-util-select`](https://github.com/syntax-tree/unist-util-select)
-    — select nodes with CSS-like selectors
+* [`unist-util-visit-parents`][vp]
+  — walk the tree with a stack of parents
+* [`unist-util-filter`](https://github.com/syntax-tree/unist-util-filter)
+  — create a new tree with all nodes that pass a test
+* [`unist-util-map`](https://github.com/syntax-tree/unist-util-map)
+  — create a new tree with all nodes mapped by a given function
+* [`unist-util-flatmap`](https://gitlab.com/staltz/unist-util-flatmap)
+  — create a new tree by mapping (to an array) with the given function
+* [`unist-util-remove`](https://github.com/syntax-tree/unist-util-remove)
+  — remove nodes from a tree that pass a test
+* [`unist-util-select`](https://github.com/syntax-tree/unist-util-select)
+  — select nodes with CSS-like selectors
 
 ## Contribute
 
