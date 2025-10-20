@@ -204,6 +204,20 @@ visit(sampleTree, 'definition', function (node) {
   })
 })
 
+visit(sampleTree, ['definition'], function (node) {
+  visit(node, function (node, _, parent) {
+    expectNotType<Definition>(node)
+    expectNotType<never>(parent)
+  })
+})
+
+visit(sampleTree, ['definition'] as const, function (node) {
+  visit(node, function (node, _, parent) {
+    expectType<Definition>(node)
+    expectType<never>(parent)
+  })
+})
+
 function isHeading(node: Node): node is Heading {
   return node ? node.type === 'heading' : false
 }
