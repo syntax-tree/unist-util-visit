@@ -235,15 +235,10 @@ visit(sampleTree, ['heading', {depth: 1}, isHeading], function (node) {
   expectType<Root | RootContent>(node)
 })
 
-// To do: update to `unist-util-is` should make this work?
-// visit(
-//   sampleTree,
-//   ['heading', {depth: 1}, isHeading] as const,
-//   function (node) {
-//     // Unfortunately TS casts things in arrays too vague.
-//     expectType<Root | RootContent>(node)
-//   }
-// )
+// As const works.
+visit(sampleTree, ['heading', {depth: 1}, isHeading] as const, function (node) {
+  expectType<Heading>(node)
+})
 
 // ## Return type: incorrect.
 // @ts-expect-error: not an action.
