@@ -50,7 +50,7 @@
   "dependencies": {
     "@types/unist": "^3.0.0",
     "unist-util-is": "^6.0.0",
-    "unist-util-visit-parents": "^6.0.0"
+    "unist-util-visit-parents": "^6.1.0"
   },
   "devDependencies": {
     "@types/mdast": "^4.0.0",

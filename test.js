@@ -64,7 +64,7 @@ test('visit', async function (t) {
     assert.throws(function () {
       // @ts-expect-error: check that the runtime throws an error.
       visit()
-    }, /TypeError: visitor is not a function/)
+    }, /Unexpected value `undefined` for `tree`, expected node/)
   })
 
   await t.test('should fail without visitor', async function () {
