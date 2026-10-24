@@ -1,6 +1,6 @@
 /**
  * @import {Root} from 'mdast'
- * @import {Node} from 'unist'
+ * @import {Node, Parent} from 'unist'
  */
 
 import assert from 'node:assert/strict'
@@ -136,7 +136,16 @@ test('visit', async function (t) {
         tree,
         test,
         /**
+         * Check that a requested node is visited.
+         *
+         * @param node
+         *   Visited node.
+         * @param index
+         *   Index of `node` in `parent`.
+         * @param parent
+         *   Parent of `node`.
          * @returns {undefined}
+         *   Nothing.
          */
         function (node, index, parent) {
           const info = '(' + (parent && parent.type) + ':' + index + ')'
@@ -148,8 +157,14 @@ test('visit', async function (t) {
       assert.equal(n, 3, 'should visit all passing nodes')
 
       /**
+       * Check if a node is after the fourth child.
+       *
        * @param {Node} _
+       *   Node.
        * @param {number | undefined} index
+       *   Index of node in its parent.
+       * @returns {boolean}
+       *   Whether the node is after the fourth child.
        */
       function test(_, index) {
         return typeof index === 'number' && index > 3

@@ -54,8 +54,8 @@
   },
   "devDependencies": {
     "@types/mdast": "^4.0.0",
-    "@types/node": "^25.0.0",
-    "c8": "^10.0.0",
+    "@types/node": "^26.0.0",
+    "c8": "^12.0.0",
     "mdast-util-from-markdown": "^2.0.0",
     "mdast-util-gfm": "^3.0.0",
     "micromark-extension-gfm": "^3.0.0",
@@ -64,8 +64,8 @@
     "remark-preset-wooorm": "^11.0.0",
     "tsd": "^0.33.0",
     "type-coverage": "^2.0.0",
-    "typescript": "^5.0.0",
-    "xo": "^1.0.0"
+    "typescript": "^6.0.0",
+    "xo": "^5.0.0"
   },
   "scripts": {
     "prepack": "npm run build && npm run format",
@@ -97,12 +97,5 @@
     ],
     "ignoreCatch": true,
     "strict": true
-  },
-  "xo": {
-    "space": true,
-    "prettier": true,
-    "rules": {
-      "unicorn/prefer-at": "off"
-    }
   }
 }
