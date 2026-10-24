@@ -10,10 +10,8 @@ import {gfmFromMarkdown} from 'mdast-util-gfm'
 import {gfm} from 'micromark-extension-gfm'
 import {CONTINUE, EXIT, SKIP, visit} from 'unist-util-visit'
 
-// To do: remove cast after update.
-const tree = /** @type {Root} */ (
-  fromMarkdown('Some _emphasis_, **importance**, and `code`.')
-)
+const mini = fromMarkdown('*a* b')
+const tree = fromMarkdown('Some _emphasis_, **importance**, and `code`.')
 
 const stopIndex = 5
 const skipIndex = 7
@@ -71,7 +69,100 @@ test('visit', async function (t) {
     assert.throws(function () {
       // @ts-expect-error: check that the runtime throws an error.
       visit(tree)
-    }, /TypeError: visitor is not a function/)
+    }, /Unexpected value `undefined` for `enter` or `visitors`/)
+  })
+
+  await t.test('should fail with a non-visitor `enter`', async function () {
+    assert.throws(function () {
+      // @ts-expect-error: check that the runtime throws an error.
+      visit(tree, {enter: 1, exit() {}})
+    }, /Unexpected value `1` for `visitors.enter`, expected optional visitor/)
+  })
+
+  await t.test('should fail with only `enter`', async function () {
+    assert.throws(function () {
+      // @ts-expect-error: check that the runtime throws an error.
+      visit(tree, {enter() {}})
+    }, /Unexpected value `undefined` for `visitors.exit`, expected visitor/)
+  })
+
+  await t.test('should support `enter` and `exit`', async function () {
+    /** @type {Array<string>} */
+    const events = []
+
+    visit(mini, {
+      enter(node, index, parent) {
+        events.push(
+          '+' + node.type + ':' + index + ':' + (parent && parent.type)
+        )
+      },
+      exit(node, index, parent) {
+        events.push(
+          '-' + node.type + ':' + index + ':' + (parent && parent.type)
+        )
+      }
+    })
+
+    assert.equal(
+      events.join(' '),
+      '+root:undefined:undefined +paragraph:0:root +emphasis:0:paragraph +text:0:emphasis -text:0:emphasis -emphasis:0:paragraph +text:1:paragraph -text:1:paragraph -paragraph:0:root -root:undefined:undefined'
+    )
+  })
+
+  await t.test('should support only `exit`', async function () {
+    /** @type {Array<string>} */
+    const events = []
+
+    visit(mini, {
+      exit(node) {
+        events.push('-' + node.type)
+      }
+    })
+
+    assert.equal(events.join(' '), '-text -emphasis -text -paragraph -root')
+  })
+
+  await t.test('should support a test and `reverse`', async function () {
+    /** @type {Array<string>} */
+    const events = []
+
+    visit(
+      mini,
+      'text',
+      {
+        enter(node, index) {
+          events.push('+' + node.value + ':' + index)
+        },
+        exit(node, index) {
+          events.push('-' + node.value + ':' + index)
+        }
+      },
+      true
+    )
+
+    assert.equal(events.join(' '), '+ b:1 - b:1 +a:0 -a:0')
+  })
+
+  await t.test('should support an `Index` from `exit`', async function () {
+    const tree = fromMarkdown('*a* b')
+    /** @type {Array<string>} */
+    const events = []
+
+    visit(tree, {
+      exit(node, index, parent) {
+        events.push('-' + node.type)
+
+        if (parent && typeof index === 'number' && node.type === 'emphasis') {
+          parent.children.splice(index, 1)
+          return index
+        }
+      }
+    })
+
+    const paragraph = tree.children[0]
+    assert.equal(events.join(' '), '-text -emphasis -text -paragraph -root')
+    assert.ok(paragraph.type === 'paragraph')
+    assert.equal(paragraph.children.length, 1)
   })
 
   await t.test('should iterate over all nodes', async function () {

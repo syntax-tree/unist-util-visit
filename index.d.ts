@@ -3,7 +3,14 @@ export type {
   Action,
   ActionTuple,
   Index,
-  VisitorResult
+  VisitorResult,
+  VisitorResultExit
 } from 'unist-util-visit-parents'
-export type {Visitor, BuildVisitor} from './lib/index.js'
+export type {
+  BuildVisitor,
+  BuildVisitors,
+  Visitor,
+  VisitorExit,
+  Visitors
+} from './lib/index.js'
 export {CONTINUE, EXIT, SKIP, visit} from './lib/index.js'

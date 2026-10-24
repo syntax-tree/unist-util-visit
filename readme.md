@@ -14,17 +14,21 @@
 * [Install](#install)
 * [Use](#use)
 * [API](#api)
-  * [`visit(tree[, test], visitor[, reverse])`](#visittree-test-visitor-reverse)
+  * [`visit(tree[, test], enter|visitors[, reverse])`](#visittree-test-entervisitors-reverse)
   * [`CONTINUE`](#continue)
   * [`EXIT`](#exit)
   * [`SKIP`](#skip)
   * [`Action`](#action)
   * [`ActionTuple`](#actiontuple)
   * [`BuildVisitor`](#buildvisitor)
+  * [`BuildVisitors`](#buildvisitors)
   * [`Index`](#index)
   * [`Test`](#test)
   * [`Visitor`](#visitor)
+  * [`VisitorExit`](#visitorexit)
   * [`VisitorResult`](#visitorresult)
+  * [`VisitorResultExit`](#visitorresultexit)
+  * [`Visitors`](#visitors)
 * [Compatibility](#compatibility)
 * [Related](#related)
 * [Contribute](#contribute)
@@ -100,17 +104,27 @@ It exports the [TypeScript][] types
 [`ActionTuple`][api-action-tuple],
 [`Action`][api-action],
 [`BuildVisitor`][api-build-visitor],
+[`BuildVisitors`][api-build-visitors],
 [`Index`][api-index],
 [`Test`][api-test],
-[`VisitorResult`][api-visitor-result], and
+[`VisitorExit`][api-visitor-exit],
+[`VisitorResultExit`][api-visitor-result-exit],
+[`VisitorResult`][api-visitor-result],
+[`Visitors`][api-visitors], and
 [`Visitor`][api-visitor].
 There is no default export.
 
-### `visit(tree[, test], visitor[, reverse])`
+### `visit(tree[, test], enter|visitors[, reverse])`
 
 This function works exactly the same as
 [`unist-util-visit-parents`][github-vp],
-but [`Visitor`][api-visitor] has a different signature.
+but [`Visitor`][api-visitor] and [`VisitorExit`][api-visitor-exit] have a
+different signature.
+
+###### Signatures
+
+* `visit(tree[, test], enter[, reverse])`
+* `visit(tree[, test], visitors[, reverse])`
 
 ### `CONTINUE`
 
@@ -139,6 +153,12 @@ See [`ActionTuple` in `unist-util-visit-parents`][github-vp-action-tuple].
 Build a typed `Visitor` function from a tree and a test (TypeScript type).
 See [`BuildVisitor` in `unist-util-visit-parents`][github-vp-build-visitor].
 
+### `BuildVisitors`
+
+Build typed [`Visitors`][api-visitors] from a tree and a test (TypeScript
+type).
+See [`BuildVisitors` in `unist-util-visit-parents`][github-vp-build-visitors].
+
 ### `Index`
 
 Move to the sibling at `index` next (TypeScript type).
@@ -151,48 +171,70 @@ See [`Index` in `unist-util-visit-parents`][github-vp-index].
 
 ### `Visitor`
 
-Handle a node (matching `test`, if given) (TypeScript type).
-
-Visitors are free to transform `node`.
-They can also transform `parent`.
-
-Replacing `node` itself, if `SKIP` is not returned, still causes its
-descendants to be walked (which is a bug).
-
-When adding or removing previous siblings of `node` (or next siblings, in
-case of reverse), the `Visitor` should return a new `Index` to specify the
-sibling to traverse after `node` is traversed.
-Adding or removing next siblings of `node` (or previous siblings, in case
-of reverse) is handled as expected without needing to return a new `Index`.
-
-Removing the children property of `parent` still results in them being
-traversed.
+Handle a node (matching `test`, if given) before its children (TypeScript
+type).
+Like [`Visitor` in `unist-util-visit-parents`][github-vp-visitor],
+but with `index` and `parent` instead of `parents`.
 
 ###### Parameters
 
 * `node` ([`Node`][github-unist-node])
   — found node
 * `index` (`number` or `undefined`)
-  — index of `node` in `parent`
+  — index of `node` in `parent`,
+  or `undefined` for the tree itself
 * `parent` ([`Node`][github-unist-node] or `undefined`)
-  — parent of `node`
+  — parent of `node`,
+  or `undefined` for the tree itself
 
 ###### Returns
 
-What to do next.
+What to do next ([`VisitorResult`][api-visitor-result]).
 
-An `Index` is treated as a tuple of `[CONTINUE, Index]`.
-An `Action` is treated as a tuple of `[Action]`.
+### `VisitorExit`
 
-Passing a tuple back only makes sense if the `Action` is `SKIP`.
-When the `Action` is `EXIT`, that action can be returned.
-When the `Action` is `CONTINUE`, `Index` can be returned.
+Handle a node (matching `test`, if given) after its children (TypeScript type).
+Like [`VisitorExit` in `unist-util-visit-parents`][github-vp-visitor-exit],
+but with `index` and `parent` instead of `parents`.
+
+###### Parameters
+
+* `node` ([`Node`][github-unist-node])
+  — found node
+* `index` (`number` or `undefined`)
+  — index of `node` in `parent`,
+  or `undefined` for the tree itself
+* `parent` ([`Node`][github-unist-node] or `undefined`)
+  — parent of `node`,
+  or `undefined` for the tree itself
+
+###### Returns
+
+What to do next ([`VisitorResultExit`][api-visitor-result-exit]).
 
 ### `VisitorResult`
 
 Any value that can be returned from a visitor (TypeScript type).
 See [`VisitorResult` in
 `unist-util-visit-parents`][github-vp-visitor-result].
+
+### `VisitorResultExit`
+
+Any value that can be returned from an exit visitor (TypeScript type).
+See [`VisitorResultExit` in
+`unist-util-visit-parents`][github-vp-visitor-result-exit].
+
+### `Visitors`
+
+Handle nodes when entering and exiting them (TypeScript type).
+See [`Visitors` in `unist-util-visit-parents`][github-vp-visitors].
+
+###### Fields
+
+* `enter` ([`Visitor`][api-visitor], optional)
+  — handle a node before its children
+* `exit` ([`VisitorExit`][api-visitor-exit])
+  — handle a node after its children
 
 ## Compatibility
 
@@ -242,6 +284,8 @@ or community you agree to abide by its terms.
 
 [api-build-visitor]: #buildvisitor
 
+[api-build-visitors]: #buildvisitors
+
 [api-continue]: #continue
 
 [api-exit]: #exit
@@ -252,11 +296,17 @@ or community you agree to abide by its terms.
 
 [api-test]: #test
 
-[api-visit]: #visittree-test-visitor-reverse
+[api-visit]: #visittree-test-entervisitors-reverse
 
 [api-visitor]: #visitor
 
+[api-visitor-exit]: #visitorexit
+
 [api-visitor-result]: #visitorresult
+
+[api-visitor-result-exit]: #visitorresultexit
+
+[api-visitors]: #visitors
 
 [badge-build-image]: https://github.com/syntax-tree/unist-util-visit/workflows/main/badge.svg
 
@@ -294,9 +344,19 @@ or community you agree to abide by its terms.
 
 [github-vp-build-visitor]: https://github.com/syntax-tree/unist-util-visit-parents#buildvisitor
 
+[github-vp-build-visitors]: https://github.com/syntax-tree/unist-util-visit-parents#buildvisitors
+
 [github-vp-index]: https://github.com/syntax-tree/unist-util-visit-parents#index
 
+[github-vp-visitor]: https://github.com/syntax-tree/unist-util-visit-parents#visitor
+
+[github-vp-visitor-exit]: https://github.com/syntax-tree/unist-util-visit-parents#visitorexit
+
 [github-vp-visitor-result]: https://github.com/syntax-tree/unist-util-visit-parents#visitorresult
+
+[github-vp-visitor-result-exit]: https://github.com/syntax-tree/unist-util-visit-parents#visitorresultexit
+
+[github-vp-visitors]: https://github.com/syntax-tree/unist-util-visit-parents#visitors
 
 [health]: https://github.com/syntax-tree/.github
 
